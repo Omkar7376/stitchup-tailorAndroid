@@ -1,0 +1,54 @@
+package com.tailorapp.stitchup.data.di
+
+import com.tailorapp.stitchup.constant.ApiConstant.API_KEY
+import com.tailorapp.stitchup.constant.ApiConstant.BASE_URL
+import com.tailorapp.stitchup.data.remote.api.AuthApiService
+import com.tailorapp.stitchup.data.repo.authRepo.LoginRepoImp
+import com.tailorapp.stitchup.domain.repo.authRepo.LoginRepo
+import com.tailorapp.stitchup.retrofit.ApiKeyInterceptor
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
+import okhttp3.OkHttpClient
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
+import javax.inject.Singleton
+
+@Module
+@InstallIn(SingletonComponent::class)
+object NetworkModule {
+
+    @Provides
+    @Singleton
+    fun provideApiKeyInterceptor(): ApiKeyInterceptor =
+        ApiKeyInterceptor(API_KEY)
+
+    @Provides
+    @Singleton
+    fun provideRetrofit(apiKeyInterceptor : ApiKeyInterceptor): Retrofit {
+        val okHttpClient = OkHttpClient.Builder()
+            .connectTimeout(60, TimeUnit.SECONDS)
+            .readTimeout(60, TimeUnit.SECONDS)
+            .writeTimeout(60, TimeUnit.SECONDS)
+            .addInterceptor(apiKeyInterceptor)
+            .build()
+
+        return Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .client(okHttpClient)
+            .build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideAuthApi(retrofit: Retrofit): AuthApiService = retrofit.create(AuthApiService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideAuthRepository(api: AuthApiService): LoginRepo =
+        LoginRepoImp(api)
+
+}

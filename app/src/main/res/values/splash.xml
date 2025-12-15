@@ -2,7 +2,7 @@
 <resources>
     <style name="App.Starting.Theme" parent="Theme.SplashScreen">
         <item name="windowSplashScreenBackground">@color/white</item>
-        <item name="windowSplashScreenAnimatedIcon">@drawable/stitchuplogo </item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/stitchuplogo</item>
         <item name="postSplashScreenTheme">@style/Theme.StitchUp</item>
     </style>
 </resources>
