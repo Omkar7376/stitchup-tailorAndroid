@@ -155,7 +155,7 @@ fun RegisterScreen(
                                             snackBarHostState.showSnackbar("Age is required")
                                         }
                                     }
-                                    email.isBlank() || !email.contains("@") -> {
+                                    email.isBlank() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches() -> {
                                         scope.launch {
                                             snackBarHostState.showSnackbar("Email is required with proper format")
                                         }

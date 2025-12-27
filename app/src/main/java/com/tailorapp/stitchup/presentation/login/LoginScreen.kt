@@ -63,8 +63,8 @@ fun LoginScreen(
     val scope = rememberCoroutineScope()
 
     LaunchedEffect(state.message) {
-        state.message?.let {
-            snackBarHostState.showSnackbar(it)
+        state.message?.let { errorMessage ->
+            snackBarHostState.showSnackbar(errorMessage)
             viewModel.clearMessage()
         }
     }
