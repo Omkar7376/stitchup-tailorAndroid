@@ -4,7 +4,9 @@ import com.tailorapp.stitchup.constant.ApiConstant.API_KEY
 import com.tailorapp.stitchup.constant.ApiConstant.BASE_URL
 import com.tailorapp.stitchup.data.remote.api.AuthApiService
 import com.tailorapp.stitchup.data.repo.authRepo.LoginRepoImp
+import com.tailorapp.stitchup.data.repo.authRepo.RegisterRepoImp
 import com.tailorapp.stitchup.domain.repo.authRepo.LoginRepo
+import com.tailorapp.stitchup.domain.repo.authRepo.RegisterRepo
 import com.tailorapp.stitchup.retrofit.ApiKeyInterceptor
 import dagger.Module
 import dagger.Provides
@@ -50,5 +52,10 @@ object NetworkModule {
     @Singleton
     fun provideAuthRepository(api: AuthApiService): LoginRepo =
         LoginRepoImp(api)
+
+    @Provides
+    @Singleton
+    fun provideRegisterRepo(api: AuthApiService): RegisterRepo =
+        RegisterRepoImp(api)
 
 }

@@ -2,6 +2,7 @@ package com.tailorapp.stitchup.presentation.login.component
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
@@ -18,12 +19,11 @@ import com.tailorapp.stitchup.ui.theme.unfocusedTextFieldText
 fun LoginTextField(
     modifier: Modifier = Modifier,
     label: String,
-    trailing: String,
     value: String,
     onValueChange: (String) -> Unit
 ) {
     val uiColor = if (isSystemInDarkTheme()) Color.White else Color.Black
-    TextField(
+    OutlinedTextField(
         modifier = modifier,
         value = value,
         onValueChange = onValueChange,
@@ -36,14 +36,6 @@ fun LoginTextField(
             unfocusedContainerColor = MaterialTheme.colorScheme.textFieldContainer,
             focusedContainerColor = MaterialTheme.colorScheme.textFieldContainer,
         ),
-        trailingIcon = {
-            TextButton(onClick = {}) {
-                Text(
-                    text = trailing,
-                    style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Medium),
-                    color = uiColor)
-            }
-        },
         singleLine = true
-        )
+    )
 }

@@ -21,7 +21,7 @@ fun UserDetailsDto.toUserDetails() = UserDetails(
 
 fun ProfileDetailsDto.toProfileDetails() = ProfileDetails(
     id = id,
-    bio = bio,
+    bio = bio?: "",
     userId = userId,
 )
 

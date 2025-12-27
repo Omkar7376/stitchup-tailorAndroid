@@ -19,6 +19,4 @@ class LoginUseCase(private val logiRepo: LoginRepo) {
             emit(Resource.Error(e.message.toString()))
         }
     }.flowOn(Dispatchers.IO)
-
-
 }

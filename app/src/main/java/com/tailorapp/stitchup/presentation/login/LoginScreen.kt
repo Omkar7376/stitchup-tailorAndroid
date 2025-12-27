@@ -2,6 +2,8 @@ package com.tailorapp.stitchup.presentation.login
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -13,11 +15,14 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MaterialTheme.typography
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -26,6 +31,7 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -45,17 +51,20 @@ import com.tailorapp.stitchup.presentation.login.component.LoginTextField
 import com.tailorapp.stitchup.ui.theme.Blue
 import com.tailorapp.stitchup.ui.theme.Gray
 import com.tailorapp.stitchup.ui.theme.dimens
+import kotlinx.coroutines.launch
 
 @Composable
 fun LoginScreen(
+    navController: NavController,
     viewModel: LoginViewModel = hiltViewModel(),
 ) {
     val state = viewModel.state.collectAsState().value
-    val snackbarHostState = remember { SnackbarHostState() }
+    val snackBarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
 
     LaunchedEffect(state.message) {
         state.message?.let {
-            snackbarHostState.showSnackbar(it)
+            snackBarHostState.showSnackbar(it)
             viewModel.clearMessage()
         }
     }
@@ -72,12 +81,16 @@ fun LoginScreen(
         }
     }
 
-
-    Box(modifier = Modifier.fillMaxSize()) {
+    Scaffold(
+        modifier = Modifier.fillMaxSize(),
+        snackbarHost = { SnackbarHost(snackBarHostState) }
+    ) { padding ->
         Surface {
-            Column(modifier = Modifier.fillMaxSize()) {
+            Column(
+                modifier = Modifier.fillMaxSize()
+            ) {
                 TopSection()
-                Spacer(modifier = Modifier.height(MaterialTheme.dimens.medium2))
+                Spacer(modifier = Modifier.height(MaterialTheme.dimens.medium1))
                 Column(
                     modifier = Modifier
                         .fillMaxHeight(fraction = 0.60f)
@@ -87,10 +100,32 @@ fun LoginScreen(
                         state = state,
                         onEmailChange = viewModel::onEmailChanged,
                         onPasswordChange = viewModel::onPasswordChanged,
-                        onLoginClick = viewModel::login
+                        onLoginClick = {
+                            when{
+                                state.email.isBlank() || !state.email.contains("@") -> {
+                                    scope.launch {
+                                        snackBarHostState.showSnackbar("Email is required in proper format")
+                                    }
+                                }
+                                state.password.isBlank() || state.password.length > 10  -> {
+                                    scope.launch {
+                                        snackBarHostState.showSnackbar("Password is required with length less than 10")
+                                    }
+                                }
+                                else ->  {
+                                    viewModel.login()
+                                }
+                            }
+                        }
                     )
                 }
-                LastSection()
+                LastSection(
+                    onSignUpClick = {
+                        navController.navigate("register") {
+                            popUpTo("login") { inclusive = true }
+                        }
+                    }
+                )
             }
         }
 
@@ -98,7 +133,12 @@ fun LoginScreen(
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(Color.Black.copy(alpha = 0.3f)),
+                    .background(Color.Black.copy(alpha = 0.3f))
+                    .clickable(
+                        indication = null,
+                        interactionSource = remember { MutableInteractionSource() },
+                        onClick = {}
+                    ),
                 contentAlignment = Alignment.Center) {
                 CircularProgressIndicator(
                     color = if (isSystemInDarkTheme()) Color.White else Color.Black,
@@ -150,14 +190,12 @@ fun LoginSection(
     LoginTextField(
         modifier = Modifier.fillMaxWidth(),
         label = "Email",
-        trailing = "",
         value = state.email,
-        onValueChange = onEmailChange
+        onValueChange = onEmailChange,
     )
     Spacer(modifier = Modifier.height(MaterialTheme.dimens.small2))
     LoginTextField(
         label = "Password",
-        trailing = "Forgot?",
         modifier = Modifier.fillMaxWidth(),
         value = state.password,
         onValueChange = onPasswordChange
@@ -179,19 +217,41 @@ fun LoginSection(
     ) {
         Text(text = "Login", style = typography.labelMedium.copy(fontWeight = FontWeight.Medium), fontWeight = FontWeight.Bold)
     }
-
-//    if (state.error != null) {
-//        Text(
-//            text = state.error,
-//            color = Color.Red,
-//            modifier = Modifier.padding(top = 8.dp)
-//        )
-//    }
 }
 
 @Composable
-fun LastSection() {
+fun LastSection(
+    onSignUpClick: () -> Unit = {}
+) {
     val uiColor = if (isSystemInDarkTheme()) Color.White else Color.Black
+
+    val text = buildAnnotatedString {
+
+        withStyle(
+            style = SpanStyle(
+                color = uiColor,
+            )
+        ) {
+            append("Don't have account? ")
+        }
+
+        pushStringAnnotation(
+            tag = "SIGN_UP",
+            annotation = "signup"
+        )
+
+        withStyle(
+            style = SpanStyle(
+                color = uiColor,
+                fontWeight = FontWeight.Bold
+            )
+        ) {
+            append("Create now")
+        }
+
+        pop()
+    }
+
     Box(
         modifier = Modifier
             .fillMaxHeight(fraction = 0.8f)
@@ -199,28 +259,20 @@ fun LastSection() {
             .padding(horizontal = 30.dp),
         contentAlignment = Alignment.BottomCenter
     ) {
-        Text(
-            text = buildAnnotatedString {
-                withStyle(
-                    style = SpanStyle(
-                        color = Color(0xFF94A3B8),
-                        fontSize = typography.labelMedium.fontSize,
-                        fontWeight = FontWeight.Normal
-                    )
-                ){
-                    append("Don't have account?")
-                }
-                withStyle(
-                    style = SpanStyle(
-                        color = uiColor,
-                        fontSize = typography.labelMedium.fontSize,
-                        fontWeight = FontWeight.Normal
-                    )
-                ){
-                    append(" ")
-                    append("Create now")
+
+        ClickableText(
+            text = text,
+            style = typography.labelMedium,
+            onClick = { offset ->
+                text.getStringAnnotations(
+                    tag = "SIGN_UP",
+                    start = offset,
+                    end = offset
+                ).firstOrNull()?.let {
+                    onSignUpClick()
                 }
             }
         )
     }
 }
+

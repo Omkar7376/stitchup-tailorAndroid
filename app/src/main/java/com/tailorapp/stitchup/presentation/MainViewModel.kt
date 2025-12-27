@@ -22,14 +22,11 @@ sealed class AuthState {
 @HiltViewModel
 class MainViewModel @Inject constructor (private val authDataStore: AuthDataStore) : ViewModel() {
     val authState: StateFlow<AuthState> =
-            authDataStore.getToken()
-                .map { token ->
-                if (token.isNullOrEmpty()) AuthState.Unauthenticated else AuthState.Authenticated
-            }
-                .stateIn(
-                    viewModelScope,
-                    SharingStarted.WhileSubscribed(5000),
-                    AuthState.Loading
-                )
-
+        authDataStore.getToken().map { token ->
+            if (token.isNullOrEmpty()) AuthState.Unauthenticated else AuthState.Authenticated
+        }.stateIn(
+            viewModelScope,
+            SharingStarted.WhileSubscribed(5000),
+            AuthState.Loading
+        )
 }

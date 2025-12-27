@@ -13,7 +13,8 @@ class RegisterUseCase(private val registerRepo: RegisterRepo) {
     fun register(request: RegisterRequestDto) : Flow<Resource<RegisterUserResponse?>> = flow {
         emit(Resource.Loading())
         try {
-            emit(registerRepo.register(request))
+            val result = registerRepo.register(request)
+            emit(result)
         } catch (e : Exception) {
             emit(Resource.Error(e.message.toString()))
         }
