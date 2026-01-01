@@ -24,8 +24,13 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.tailorapp.stitchup.presentation.AuthState
 import com.tailorapp.stitchup.presentation.MainViewModel
+import com.tailorapp.stitchup.presentation.addCustomer.AddCustomerScreen
+import com.tailorapp.stitchup.presentation.customer.CustomersScreen
+import com.tailorapp.stitchup.presentation.deliveryOrder.DeliveryOrder
 import com.tailorapp.stitchup.presentation.home.HomeScreen
+import com.tailorapp.stitchup.presentation.home.HomeViewModel
 import com.tailorapp.stitchup.presentation.login.LoginScreen
+import com.tailorapp.stitchup.presentation.order.OrdersScreen
 import com.tailorapp.stitchup.presentation.registration.RegisterScreen
 
 @Composable
@@ -33,6 +38,7 @@ fun AppNav() {
     val navController = rememberNavController()
     val mainViewModel: MainViewModel = hiltViewModel()
     val authState by mainViewModel.authState.collectAsState()
+    val homeViewModel: HomeViewModel = hiltViewModel()
 
     LaunchedEffect(authState) {
         Log.d("###", "Auth_state: $authState")
@@ -73,14 +79,37 @@ fun AppNav() {
             navController = navController,
             startDestination = startDest
         ) {
+            composable("home") {
+                HomeScreen(
+                    navTo = {route ->
+                        navController.navigate(route)
+                    }
+                )
+//                LaunchedEffect(authState) {
+//                    if (authState is AuthState.Unauthenticated) {
+//                        navController.navigate("login") {
+//                            popUpTo("home") { inclusive = false }
+//                        }
+//                    }
+//                }
+            }
             composable("login") {
                 LoginScreen(navController)
             }
-            composable("home") {
-                HomeScreen()
-            }
             composable("register") {
                 RegisterScreen(navController)
+            }
+            composable("addCustomer") {
+                AddCustomerScreen()
+            }
+            composable("customerList") {
+                CustomersScreen()
+            }
+            composable("deliveryOrder") {
+                DeliveryOrder()
+            }
+            composable("totalOrders") {
+                OrdersScreen()
             }
         }
     }
