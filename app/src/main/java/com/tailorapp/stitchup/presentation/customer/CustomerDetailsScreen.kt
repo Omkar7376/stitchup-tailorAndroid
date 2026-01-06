@@ -8,8 +8,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 
 @Composable
-fun CustomersScreen(modifier: Modifier = Modifier) {
+fun CustomerProfileScreen(
+    customerId: Int? = null,
+) {
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        Text(text = "CustomersScreen")
+        Text(text = "CustomerProfileScreen")
     }
 }

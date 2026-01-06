@@ -19,12 +19,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.tailorapp.stitchup.presentation.AuthState
 import com.tailorapp.stitchup.presentation.MainViewModel
 import com.tailorapp.stitchup.presentation.addCustomer.AddCustomerScreen
+import com.tailorapp.stitchup.presentation.customer.CustomerProfileScreen
 import com.tailorapp.stitchup.presentation.customer.CustomersScreen
 import com.tailorapp.stitchup.presentation.deliveryOrder.DeliveryOrder
 import com.tailorapp.stitchup.presentation.home.HomeScreen
@@ -103,13 +106,24 @@ fun AppNav() {
                 AddCustomerScreen()
             }
             composable("customerList") {
-                CustomersScreen()
+                CustomersScreen(
+                    navController = navController,
+                )
             }
             composable("deliveryOrder") {
                 DeliveryOrder()
             }
             composable("totalOrders") {
                 OrdersScreen()
+            }
+            composable("customerDetails/{customerId}",
+                arguments = listOf(
+                    navArgument("customerId") { type = NavType.IntType }
+                )) { backStackEntry ->
+                val customerId = backStackEntry.arguments?.getInt("customerId")
+                CustomerProfileScreen(
+                    customerId = customerId
+                )
             }
         }
     }

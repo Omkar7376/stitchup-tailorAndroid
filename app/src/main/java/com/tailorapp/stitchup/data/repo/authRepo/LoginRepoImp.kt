@@ -1,8 +1,8 @@
 package com.tailorapp.stitchup.data.repo.authRepo
 
 import android.util.Log
-import com.tailorapp.stitchup.domain.mapper.toLoginResponse
-import com.tailorapp.stitchup.data.remote.api.AuthApiService
+import com.tailorapp.stitchup.domain.mapper.authMapper.toLoginResponse
+import com.tailorapp.stitchup.data.remote.api.authApi.AuthApiService
 import com.tailorapp.stitchup.data.remote.dto.loginDto.LoginRequestDto
 import com.tailorapp.stitchup.domain.model.auth.login.LoginResponse
 import com.tailorapp.stitchup.domain.repo.authRepo.LoginRepo
