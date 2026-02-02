@@ -1,7 +1,7 @@
 package com.tailorapp.stitchup.domain.usecase.customer
 
 import com.tailorapp.stitchup.constant.Resource
-import com.tailorapp.stitchup.data.remote.dto.customerDto.CustomerDataDto
+import com.tailorapp.stitchup.data.remote.dto.customerDto.customerList.CustomerDataDto
 import com.tailorapp.stitchup.domain.repo.customerRepo.CustomersListRepo
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow

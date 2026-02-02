@@ -1,4 +1,4 @@
-package com.tailorapp.stitchup.data.remote.dto.customerDto
+package com.tailorapp.stitchup.data.remote.dto.customerDto.customerList
 
 data class CustomerDataDto(
     val ADDRESS: String,

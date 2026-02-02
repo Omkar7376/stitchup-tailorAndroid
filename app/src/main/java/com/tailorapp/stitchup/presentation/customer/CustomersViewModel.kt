@@ -3,7 +3,7 @@ package com.tailorapp.stitchup.presentation.customer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.tailorapp.stitchup.constant.Resource
-import com.tailorapp.stitchup.data.remote.dto.customerDto.CustomerDataDto
+import com.tailorapp.stitchup.data.remote.dto.customerDto.customerList.CustomerDataDto
 import com.tailorapp.stitchup.domain.usecase.customer.CustomersListUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
