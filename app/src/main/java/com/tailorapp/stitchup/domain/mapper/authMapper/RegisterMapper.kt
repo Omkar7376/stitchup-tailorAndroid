@@ -1,6 +1,5 @@
-package com.tailorapp.stitchup.domain.mapper
+package com.tailorapp.stitchup.domain.mapper.authMapper
 
-import com.tailorapp.stitchup.constant.Resource
 import com.tailorapp.stitchup.data.remote.dto.registerDto.ProfileDetailsDto
 import com.tailorapp.stitchup.data.remote.dto.registerDto.RegisterUserResponseDto
 import com.tailorapp.stitchup.data.remote.dto.registerDto.UserDetailsDto

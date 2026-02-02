@@ -68,7 +68,7 @@ class LoginViewModel @Inject constructor(
                         Log.d("###", "Error: ${result.message}")
                         _state.value = _state.value.copy(
                             isLoading = false,
-                            message = result.message ?: "Something went wrong"
+                            message = result.message
                         )
                     }
                 }

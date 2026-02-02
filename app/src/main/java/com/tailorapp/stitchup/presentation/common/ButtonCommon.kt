@@ -15,7 +15,7 @@ import com.tailorapp.stitchup.ui.theme.Blue
 import com.tailorapp.stitchup.ui.theme.Gray
 
 @Composable
-fun Button(
+fun ButtonCommon(
     modifier: Modifier = Modifier,
     onClick: () -> Unit,
     enabled: Boolean = true,

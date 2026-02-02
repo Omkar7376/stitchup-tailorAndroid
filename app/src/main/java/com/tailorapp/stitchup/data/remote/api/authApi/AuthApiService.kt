@@ -1,4 +1,4 @@
-package com.tailorapp.stitchup.data.remote.api
+package com.tailorapp.stitchup.data.remote.api.authApi
 
 import com.tailorapp.stitchup.data.remote.dto.loginDto.LoginRequestDto
 import com.tailorapp.stitchup.data.remote.dto.loginDto.LoginResponseDto

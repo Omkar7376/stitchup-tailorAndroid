@@ -1,4 +1,4 @@
-package com.tailorapp.stitchup.domain.mapper
+package com.tailorapp.stitchup.domain.mapper.authMapper
 
 import com.tailorapp.stitchup.data.remote.dto.loginDto.LoginResponseDataDto
 import com.tailorapp.stitchup.data.remote.dto.loginDto.LoginResponseDto

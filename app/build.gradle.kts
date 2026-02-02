@@ -94,4 +94,7 @@ dependencies {
 
     // DataStore
     implementation("androidx.datastore:datastore-preferences:1.2.0")
+
+    //Icons
+    implementation("androidx.compose.material:material-icons-extended")
 }
