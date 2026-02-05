@@ -103,7 +103,7 @@ fun AppNav() {
                 RegisterScreen(navController)
             }
             composable("addCustomer") {
-                AddCustomerScreen()
+                AddCustomerScreen(navController)
             }
             composable("customerList") {
                 CustomersScreen(

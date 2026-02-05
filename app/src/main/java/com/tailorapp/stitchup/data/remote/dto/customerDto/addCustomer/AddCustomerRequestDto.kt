@@ -7,6 +7,6 @@ data class AddCustomerRequestDto(
     val mob_num: String,
     val name: String,
     val order: OrderDto,
-    val pantMeasurement: PantMeasurementDto,
-    val shirtMeasurement: ShirtMeasurementDto
+    val shirtMeasurement: ShirtMeasurementDto? = null,
+    val pantMeasurement: PantMeasurementDto? = null
 )
