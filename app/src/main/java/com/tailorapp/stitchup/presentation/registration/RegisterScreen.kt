@@ -170,7 +170,7 @@ fun RegisterScreen(
                                             snackBarHostState.showSnackbar("Invalid phone number")
                                         }
                                     }
-                                    password.isBlank() -> {
+                                    password.isBlank() || password.length > 10 -> {
                                         scope.launch {
                                             snackBarHostState.showSnackbar("Password is required")
                                         }

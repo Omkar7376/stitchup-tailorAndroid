@@ -1,5 +1,7 @@
 package com.tailorapp.stitchup.presentation.addCustomer
 
+import com.tailorapp.stitchup.constant.Resource
+
 data class AddCustomerUiState(
     val isLoading: Boolean = false,
     val message: String? = null,

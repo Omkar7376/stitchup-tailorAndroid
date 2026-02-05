@@ -51,7 +51,9 @@ import androidx.navigation.NavController
 import com.tailorapp.stitchup.R
 import com.tailorapp.stitchup.presentation.login.component.LoginTextField
 import com.tailorapp.stitchup.ui.theme.Blue
+import com.tailorapp.stitchup.ui.theme.DarkBrown
 import com.tailorapp.stitchup.ui.theme.Gray
+import com.tailorapp.stitchup.ui.theme.SoftGolden
 import com.tailorapp.stitchup.ui.theme.dimens
 import kotlinx.coroutines.launch
 
@@ -153,7 +155,7 @@ fun LoginScreen(
 
 @Composable
 fun TopSection() {
-    val uiColor = if (isSystemInDarkTheme()) Color.White else Color.Black
+    val uiColor = if (isSystemInDarkTheme()) SoftGolden else DarkBrown
     Box(contentAlignment = Alignment.TopCenter) {
         Image(
             modifier = Modifier
@@ -211,8 +213,8 @@ fun LoginSection(
         onClick = { onLoginClick() },
         enabled = !state.isLoading,
         colors = ButtonDefaults.buttonColors(
-            containerColor = if (isSystemInDarkTheme()) Gray else Blue,
-            contentColor = Color.White
+            containerColor = if (isSystemInDarkTheme()) SoftGolden else DarkBrown,
+            contentColor = if (isSystemInDarkTheme()) DarkBrown else SoftGolden,
         ),
         shape = RoundedCornerShape(4.dp)
 
@@ -225,7 +227,7 @@ fun LoginSection(
 fun LastSection(
     onSignUpClick: () -> Unit = {}
 ) {
-    val uiColor = if (isSystemInDarkTheme()) Color.White else Color.Black
+    val uiColor = if (isSystemInDarkTheme()) SoftGolden else DarkBrown
 
     val text = buildAnnotatedString {
 
