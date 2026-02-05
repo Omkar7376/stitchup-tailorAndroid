@@ -12,13 +12,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-data class CustomersUiState(
-    val isLoading: Boolean = false,
-    val customers: List<CustomerDataDto> = emptyList(),
-    val error: String? = null,
-    val message: String? = null,
-)
-
 @HiltViewModel
 class CustomersViewModel @Inject constructor(private val customersListUseCase: CustomersListUseCase) : ViewModel() {
 

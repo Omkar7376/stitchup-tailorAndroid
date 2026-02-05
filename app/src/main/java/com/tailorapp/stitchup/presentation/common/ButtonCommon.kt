@@ -12,7 +12,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.tailorapp.stitchup.ui.theme.Blue
+import com.tailorapp.stitchup.ui.theme.DarkBrown
 import com.tailorapp.stitchup.ui.theme.Gray
+import com.tailorapp.stitchup.ui.theme.SoftGolden
 
 @Composable
 fun ButtonCommon(
@@ -21,14 +23,14 @@ fun ButtonCommon(
     enabled: Boolean = true,
     text: String,
 ) {
-    val uiColor = if (isSystemInDarkTheme()) Color.White else Color.Black
+    val uiColor = if (isSystemInDarkTheme()) SoftGolden else DarkBrown
     Button(
         modifier = modifier,
         onClick = onClick,
         enabled = enabled,
         colors = ButtonDefaults.buttonColors(
-            containerColor = if (isSystemInDarkTheme()) Gray else Blue,
-            contentColor = Color.White
+            containerColor = uiColor,
+            contentColor = if (isSystemInDarkTheme()) DarkBrown else SoftGolden,
         ),
         shape = RoundedCornerShape(4.dp)
     ) {

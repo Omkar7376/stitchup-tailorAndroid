@@ -176,6 +176,9 @@ fun RegisterScreen(
                                         }
                                     }
                                     else -> {
+                                        scope.launch {
+                                            snackBarHostState.showSnackbar("Registering...")
+                                        }
                                         val req = RegisterRequestDto(
                                             name = name,
                                             username = userName,
