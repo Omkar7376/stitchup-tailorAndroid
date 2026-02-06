@@ -145,7 +145,7 @@ fun LoginScreen(
                     ),
                 contentAlignment = Alignment.Center) {
                 CircularProgressIndicator(
-                    color = if (isSystemInDarkTheme()) Color.White else Color.Black,
+                    color = if (isSystemInDarkTheme()) SoftGolden else DarkBrown,
                     strokeWidth = 3.dp
                 )
             }

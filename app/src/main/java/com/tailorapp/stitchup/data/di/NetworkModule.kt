@@ -8,10 +8,12 @@ import com.tailorapp.stitchup.data.repo.authRepo.LoginRepoImp
 import com.tailorapp.stitchup.data.repo.authRepo.RegisterRepoImp
 import com.tailorapp.stitchup.data.repo.customerRepo.AddCustomerRepoImp
 import com.tailorapp.stitchup.data.repo.customerRepo.CustomersListRepoImp
+import com.tailorapp.stitchup.data.repo.customerRepo.GetCustomerDetailsRepoImp
 import com.tailorapp.stitchup.domain.repo.authRepo.LoginRepo
 import com.tailorapp.stitchup.domain.repo.authRepo.RegisterRepo
 import com.tailorapp.stitchup.domain.repo.customerRepo.AddCustomerRepo
 import com.tailorapp.stitchup.domain.repo.customerRepo.CustomersListRepo
+import com.tailorapp.stitchup.domain.repo.customerRepo.GetCustomerDetailsRepo
 import com.tailorapp.stitchup.retrofit.ApiKeyInterceptor
 import dagger.Module
 import dagger.Provides
@@ -76,5 +78,10 @@ object NetworkModule {
     @Singleton
     fun provideAddCustomerRepo(api: CustomerApiService): AddCustomerRepo =
         AddCustomerRepoImp(api)
+
+    @Provides
+    @Singleton
+    fun provideGetCustomerDetailsRepo(api: CustomerApiService): GetCustomerDetailsRepo =
+        GetCustomerDetailsRepoImp(api)
 
 }
