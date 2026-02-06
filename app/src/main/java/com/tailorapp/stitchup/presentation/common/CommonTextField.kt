@@ -12,7 +12,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.tailorapp.stitchup.ui.theme.DarkBrown
+import com.tailorapp.stitchup.ui.theme.Gray
 import com.tailorapp.stitchup.ui.theme.SoftGolden
+import com.tailorapp.stitchup.ui.theme.White
 import com.tailorapp.stitchup.ui.theme.dimens
 import com.tailorapp.stitchup.ui.theme.focusedTextFieldText
 import com.tailorapp.stitchup.ui.theme.textFieldContainer
@@ -40,8 +42,8 @@ fun CommonTextField(
         colors = OutlinedTextFieldDefaults.colors(
             unfocusedPlaceholderColor = uiColor.copy(alpha = 0.5f),
             focusedPlaceholderColor = uiColor,
-            unfocusedContainerColor = Color.White,
-            focusedContainerColor = Color.White,
+            unfocusedContainerColor = if (isSystemInDarkTheme()) MaterialTheme.colorScheme.textFieldContainer else White,
+            focusedContainerColor = if (isSystemInDarkTheme()) MaterialTheme.colorScheme.textFieldContainer else White,
             focusedBorderColor = uiColor,
             unfocusedBorderColor = uiColor.copy(alpha = 0.5f),
         ),

@@ -1,6 +1,8 @@
 package com.tailorapp.stitchup.navigation
 
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -36,6 +38,7 @@ import com.tailorapp.stitchup.presentation.login.LoginScreen
 import com.tailorapp.stitchup.presentation.order.OrdersScreen
 import com.tailorapp.stitchup.presentation.registration.RegisterScreen
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun AppNav() {
     val navController = rememberNavController()

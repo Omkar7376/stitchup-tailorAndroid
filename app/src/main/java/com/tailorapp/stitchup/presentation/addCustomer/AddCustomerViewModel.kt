@@ -8,7 +8,6 @@ import com.tailorapp.stitchup.data.remote.dto.customerDto.addCustomer.AddCustome
 import com.tailorapp.stitchup.data.remote.dto.customerDto.addCustomer.OrderDto
 import com.tailorapp.stitchup.data.remote.dto.customerDto.addCustomer.PantMeasurementDto
 import com.tailorapp.stitchup.data.remote.dto.customerDto.addCustomer.ShirtMeasurementDto
-import com.tailorapp.stitchup.data.remote.dto.customerDto.customerList.GetCustomerResponseDto
 import com.tailorapp.stitchup.domain.usecase.customer.AddCustomerUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -32,6 +31,7 @@ class AddCustomerViewModel @Inject constructor(private val addCustomerUseCase: A
                     }
                     is Resource.Success -> {
                         _uiState.value = AddCustomerUiState(isLoading = false, message = result.data?.message)
+                        sendMessage("Customer Created Successfully....")
                         Log.d("###", "addNewCustomer: ${result.data}")
                     }
                     is Resource.Error -> {
@@ -102,51 +102,50 @@ class AddCustomerViewModel @Inject constructor(private val addCustomerUseCase: A
                 orderDate = state.orderDate,
                 deliveryDate = state.deliveryDate,
                 orderType = state.orderType,
-                advanceAmount = state.advance.toIntOrNull() ?: 0,
-                discount = state.discount.toIntOrNull() ?: 0,
+                advanceAmount = state.advance.toFloatOrNull() ?: 0,
+                discount = state.discount.toFloatOrNull() ?: 0,
                 status = "isPending",
                 note = state.note,
             ),
             shirtMeasurement =
                 if (state.orderType == "Shirt" || state.orderType == "Both") {
                     ShirtMeasurementDto(
-                        amount = state.shirtAmt.toIntOrNull() ?: 0,
-                        chest = state.shirtChest.toIntOrNull() ?: 0,
-                        collar = state.shirtCollar.toIntOrNull() ?: 0,
-                        back = state.shirtBack.toIntOrNull() ?: 0,
-                        cuff = state.shirtCuff.toIntOrNull() ?: 0,
-                        front1 = state.shirtFront1.toIntOrNull() ?: 0,
-                        front2 = state.shirtFront2.toIntOrNull() ?: 0,
-                        front3 = state.shirtFront3.toIntOrNull() ?: 0,
-                        length = state.shirtLength.toIntOrNull() ?: 0,
-                        shirtQnt = state.shirtQty.toIntOrNull() ?: 0,
-                        shoulder = state.shirtShoulder.toIntOrNull() ?: 0,
-                        sleeve = state.shirtSleeve.toIntOrNull() ?: 0,
+                        amount = state.shirtAmt.toFloatOrNull() ?: 0,
+                        chest = state.shirtChest.toFloatOrNull() ?: 0,
+                        collar = state.shirtCollar.toFloatOrNull() ?: 0,
+                        back = state.shirtBack.toFloatOrNull() ?: 0,
+                        cuff = state.shirtCuff.toFloatOrNull() ?: 0,
+                        front1 = state.shirtFront1.toFloatOrNull() ?: 0,
+                        front2 = state.shirtFront2.toFloatOrNull() ?: 0,
+                        front3 = state.shirtFront3.toFloatOrNull() ?: 0,
+                        length = state.shirtLength.toFloatOrNull() ?: 0,
+                        shirtQnt = state.shirtQty.toFloatOrNull() ?: 0,
+                        shoulder = state.shirtShoulder.toFloatOrNull() ?: 0,
+                        sleeve = state.shirtSleeve.toFloatOrNull() ?: 0,
                     )
                 } else null,
 
             pantMeasurement =
                 if (state.orderType == "Pant" || state.orderType == "Both") {
                     PantMeasurementDto(
-                        amount = state.pantAmt.toIntOrNull() ?: 0,
-                        bottom = state.pantBottom.toIntOrNull() ?: 0,
-                        knee = state.pantKnee.toIntOrNull() ?: 0,
-                        outsideLength = state.pantOutsideLength.toIntOrNull() ?: 0,
-                        insideLength = state.pantInsideLength.toIntOrNull() ?: 0,
-                        seat = state.pantSeat.toIntOrNull() ?: 0,
-                        thigh = state.pantThigh.toIntOrNull() ?: 0,
-                        waist = state.pantWaist.toIntOrNull() ?: 0,
-                        rise = state.pantRise.toIntOrNull() ?: 0,
-                        PantQnt = state.pantQty.toIntOrNull() ?: 0,
+                        amount = state.pantAmt.toFloatOrNull() ?: 0,
+                        bottom = state.pantBottom.toFloatOrNull() ?: 0,
+                        knee = state.pantKnee.toFloatOrNull() ?: 0,
+                        outsideLength = state.pantOutsideLength.toFloatOrNull() ?: 0,
+                        insideLength = state.pantInsideLength.toFloatOrNull() ?: 0,
+                        seat = state.pantSeat.toFloatOrNull() ?: 0,
+                        thigh = state.pantThigh.toFloatOrNull() ?: 0,
+                        waist = state.pantWaist.toFloatOrNull() ?: 0,
+                        rise = state.pantRise.toFloatOrNull() ?: 0,
+                        PantQnt = state.pantQty.toFloatOrNull() ?: 0,
                     )
                 } else null
         )
 
-        sendMessage("Customer Created Successfully....")
         addNewCustomer(request)
         Log.d("###", "onCreateCustomerClicked: ${addNewCustomer(request)}")
-        Log.d("###", "onCreateCustomerClicked: ${request.shirtMeasurement}")
-        Log.d("###", "onCreateCustomerClicked: ${request.pantMeasurement}")
+        Log.d("###", "Shirt: ${request.shirtMeasurement}")
+        Log.d("###", "Pant: ${request.pantMeasurement}")
     }
 
     fun onNameChanged(value: String) {

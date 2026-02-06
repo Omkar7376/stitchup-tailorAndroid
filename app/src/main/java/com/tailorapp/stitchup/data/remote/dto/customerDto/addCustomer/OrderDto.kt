@@ -1,9 +1,9 @@
 package com.tailorapp.stitchup.data.remote.dto.customerDto.addCustomer
 
 data class OrderDto(
-    val advanceAmount: Int,
+    val advanceAmount: Any,
     val deliveryDate: String,
-    val discount: Int,
+    val discount: Any,
     val note: String,
     val orderDate: String,
     val orderType: String,

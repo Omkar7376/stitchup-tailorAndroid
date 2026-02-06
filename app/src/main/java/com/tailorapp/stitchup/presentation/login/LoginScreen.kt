@@ -213,8 +213,8 @@ fun LoginSection(
         onClick = { onLoginClick() },
         enabled = !state.isLoading,
         colors = ButtonDefaults.buttonColors(
-            containerColor = if (isSystemInDarkTheme()) Gray else Blue,
-            contentColor = Color.White
+            containerColor = if (isSystemInDarkTheme()) SoftGolden else DarkBrown,
+            contentColor = if (isSystemInDarkTheme()) DarkBrown else SoftGolden,
         ),
         shape = RoundedCornerShape(4.dp)
 

@@ -1,6 +1,7 @@
 package com.tailorapp.stitchup.presentation.addCustomer
 
 import android.os.Build
+import android.view.MenuItem
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
@@ -28,6 +29,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.DatePicker
+import androidx.compose.material3.DatePickerColors
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -35,7 +37,9 @@ import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MenuItemColors
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -65,6 +69,7 @@ import com.tailorapp.stitchup.presentation.common.ExpandableSection
 import com.tailorapp.stitchup.presentation.common.TopBar
 import com.tailorapp.stitchup.ui.theme.DarkBrown
 import com.tailorapp.stitchup.ui.theme.SoftGolden
+import com.tailorapp.stitchup.ui.theme.White
 import com.tailorapp.stitchup.ui.theme.dimens
 import com.tailorapp.stitchup.ui.theme.focusedTextFieldText
 import com.tailorapp.stitchup.ui.theme.textFieldContainer
@@ -329,6 +334,7 @@ fun OrderDetails(
     }
 
     OrderTypeDropdown(
+        modifier = Modifier,
         selectedOrderType = orderType,
         onOrderTypeSelected = { onOrderTypeChanged(it) },
     )
@@ -712,11 +718,13 @@ fun Payment(
             label = { Text("Note", style = MaterialTheme.typography.labelMedium, color = uiColor) },
             value = note,
             onValueChange = { onNoteChanged(it) },
-            colors = TextFieldDefaults.colors(
-                unfocusedPlaceholderColor = MaterialTheme.colorScheme.unfocusedTextFieldText,
-                focusedPlaceholderColor = MaterialTheme.colorScheme.focusedTextFieldText,
-                unfocusedContainerColor = MaterialTheme.colorScheme.textFieldContainer,
-                focusedContainerColor = MaterialTheme.colorScheme.textFieldContainer,
+            colors = OutlinedTextFieldDefaults.colors(
+                unfocusedPlaceholderColor = uiColor.copy(alpha = 0.5f),
+                focusedPlaceholderColor = uiColor,
+                unfocusedContainerColor = if (isSystemInDarkTheme()) MaterialTheme.colorScheme.textFieldContainer else White,
+                focusedContainerColor = if (isSystemInDarkTheme()) MaterialTheme.colorScheme.textFieldContainer else White,
+                focusedBorderColor = uiColor,
+                unfocusedBorderColor = uiColor.copy(alpha = 0.5f),
             ),
         )
 
@@ -749,6 +757,7 @@ fun DatePickerField(
     onDateSelected: (String) -> Unit,
     modifier: Modifier
 ) {
+    val uiColor = if (isSystemInDarkTheme()) SoftGolden else DarkBrown
     var showDialog by remember { mutableStateOf(false) }
     val datePickerState = rememberDatePickerState()
 
@@ -784,10 +793,18 @@ fun DatePickerField(
     }
     Box(modifier = modifier) {
         OutlinedTextField(
-            label = { Text(label) },
+            label = { Text(label, style = MaterialTheme.typography.labelMedium, color = uiColor) },
             value = selectedDate,
             onValueChange = { onDateSelected(it) },
             readOnly = true,
+            colors = OutlinedTextFieldDefaults.colors(
+                unfocusedPlaceholderColor = uiColor.copy(alpha = 0.5f),
+                focusedPlaceholderColor = uiColor,
+                unfocusedContainerColor = if (isSystemInDarkTheme()) MaterialTheme.colorScheme.textFieldContainer else White,
+                focusedContainerColor = if (isSystemInDarkTheme()) MaterialTheme.colorScheme.textFieldContainer else White,
+                focusedBorderColor = uiColor,
+                unfocusedBorderColor = uiColor.copy(alpha = 0.5f),
+            ),
         )
         Box(
             modifier = Modifier
@@ -804,6 +821,7 @@ fun GenderDropdown(
     onGenderSelected: (String) -> Unit,
     modifier: Modifier
 ) {
+    val uiColor = if (isSystemInDarkTheme()) SoftGolden else DarkBrown
     val genders = listOf("Male", "Female", "Other")
     var expanded by remember { mutableStateOf(false) }
 
@@ -816,10 +834,18 @@ fun GenderDropdown(
             value = selectedGender,
             onValueChange = { onGenderSelected(it) },
             readOnly = true,
-            label = { Text("Gender") },
+            label = { Text("Gender", style = MaterialTheme.typography.labelMedium, color = uiColor) },
             trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded) },
             modifier = Modifier
-                .menuAnchor()
+                .menuAnchor(),
+            colors = OutlinedTextFieldDefaults.colors(
+                unfocusedPlaceholderColor = uiColor.copy(alpha = 0.5f),
+                focusedPlaceholderColor = uiColor,
+                unfocusedContainerColor = if (isSystemInDarkTheme()) MaterialTheme.colorScheme.textFieldContainer else White,
+                focusedContainerColor = if (isSystemInDarkTheme()) MaterialTheme.colorScheme.textFieldContainer else White,
+                focusedBorderColor = uiColor,
+                unfocusedBorderColor = uiColor.copy(alpha = 0.5f),
+            ),
         )
 
         ExposedDropdownMenu(
@@ -842,13 +868,16 @@ fun GenderDropdown(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun OrderTypeDropdown(
+    modifier: Modifier,
     selectedOrderType: String,
     onOrderTypeSelected: (String) -> Unit
 ) {
+    val uiColor = if (isSystemInDarkTheme()) SoftGolden else DarkBrown
     val orderTypes = listOf("Shirt", "Pant", "Both")
     var expanded by remember { mutableStateOf(false) }
 
     ExposedDropdownMenuBox(
+        modifier = Modifier,
         expanded = expanded,
         onExpandedChange = { expanded = !expanded }
     ) {
@@ -856,11 +885,19 @@ fun OrderTypeDropdown(
             value = selectedOrderType,
             onValueChange = { onOrderTypeSelected(it) },
             readOnly = true,
-            label = { Text("Order Type") },
+            label = { Text("Order Type", style = MaterialTheme.typography.labelMedium, color = uiColor  ) },
             trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded) },
             modifier = Modifier
                 .menuAnchor()
-                .fillMaxWidth()
+                .fillMaxWidth(),
+            colors = OutlinedTextFieldDefaults.colors(
+                unfocusedPlaceholderColor = uiColor.copy(alpha = 0.5f),
+                focusedPlaceholderColor = uiColor,
+                unfocusedContainerColor = if (isSystemInDarkTheme()) MaterialTheme.colorScheme.textFieldContainer else White,
+                focusedContainerColor = if (isSystemInDarkTheme()) MaterialTheme.colorScheme.textFieldContainer else White,
+                focusedBorderColor = uiColor,
+                unfocusedBorderColor = uiColor.copy(alpha = 0.5f),
+            )
         )
 
         ExposedDropdownMenu(
@@ -869,11 +906,11 @@ fun OrderTypeDropdown(
         ) {
             orderTypes.forEach {
                 DropdownMenuItem(
-                    text = { Text(text = it) },
+                    text = { Text(text = it, style = MaterialTheme.typography.labelMedium, color = uiColor) },
                     onClick = {
                         onOrderTypeSelected(it)
                         expanded = false
-                    }
+                    },
                 )
             }
         }
