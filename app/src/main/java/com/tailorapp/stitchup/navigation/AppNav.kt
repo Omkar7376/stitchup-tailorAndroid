@@ -122,7 +122,8 @@ fun AppNav() {
                 )) { backStackEntry ->
                 val customerId = backStackEntry.arguments?.getInt("customerId")
                 CustomerProfileScreen(
-                    customerId = customerId
+                    customerId = customerId,
+                    navController = navController
                 )
             }
         }

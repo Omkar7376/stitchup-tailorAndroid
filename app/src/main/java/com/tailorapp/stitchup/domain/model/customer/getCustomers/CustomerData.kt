@@ -1,4 +1,4 @@
-package com.tailorapp.stitchup.domain.model.customer
+package com.tailorapp.stitchup.domain.model.customer.getCustomers
 
 data class CustomerData(
     val ADDRESS: String,

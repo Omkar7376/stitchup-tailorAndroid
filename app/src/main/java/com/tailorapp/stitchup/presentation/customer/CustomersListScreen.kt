@@ -96,7 +96,6 @@ fun CustomersScreen(
                         imageVector = Icons.Default.ArrowBack,
                         contentDescription = null,
                         tint = uiColor,
-
                     )
                 },
             )
