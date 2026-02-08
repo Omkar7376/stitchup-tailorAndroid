@@ -29,31 +29,6 @@ class CustomersViewModel @Inject constructor(
         getCustomers()
     }
 
-    fun getCustomerDetails(id: Int){
-        viewModelScope.launch {
-            getCustomerDetailsUseCase.getCustomerDetails(id).collect { result ->
-                when(result) {
-                    is Resource.Loading -> {
-                        _uiState.value = _uiState.value.copy(isLoading = true,)
-                        Log.d("###", "getCustomerDetails: Loading")
-                    }
-                    is Resource.Success -> {
-                        _uiState.value = _uiState.value.copy(
-                            isLoading = false,
-                            customerDetails = result.data,
-                            error = null
-                        )
-                        Log.d("###", "getCustomerDetails: ${result.data}")
-                    }
-                    is Resource.Error -> {
-                        _uiState.value = uiState.value.copy(error = result.message,)
-                        Log.d("###", "getCustomerDetails: ${result.message}")
-                    }
-                }
-            }
-        }
-    }
-
     fun getCustomers() {
         viewModelScope.launch {
             customersListUseCase.getCustomersList().collect { result ->
@@ -64,7 +39,9 @@ class CustomersViewModel @Inject constructor(
                     is Resource.Success -> {
                         allCustomer = result.data ?: emptyList()
                         _uiState.value = _uiState.value.copy(
+                            isLoading = false,
                             customers = allCustomer,
+                            error = null
                         )
                     }
                     is Resource.Error -> {
@@ -77,7 +54,6 @@ class CustomersViewModel @Inject constructor(
             }
         }
     }
-
     fun search(query: String){
         if (query.isBlank()){
             _uiState.value = _uiState.value.copy(
@@ -95,6 +71,10 @@ class CustomersViewModel @Inject constructor(
         )
     }
 
+    fun updateCustomer(){
+        viewModelScope.launch {
+        }
+    }
     fun clearMessage() {
         _uiState.value = _uiState.value.copy()
     }
