@@ -67,6 +67,7 @@ import com.tailorapp.stitchup.presentation.common.ButtonCommon
 import com.tailorapp.stitchup.presentation.common.CommonTextField
 import com.tailorapp.stitchup.presentation.common.ExpandableSection
 import com.tailorapp.stitchup.presentation.common.TopBar
+import com.tailorapp.stitchup.presentation.customerDetails.componenents.GenderDropdown
 import com.tailorapp.stitchup.ui.theme.DarkBrown
 import com.tailorapp.stitchup.ui.theme.SoftGolden
 import com.tailorapp.stitchup.ui.theme.White
@@ -423,104 +424,6 @@ fun ShirtMeasurement(
                     Spacer(modifier = Modifier.weight(1f))
                 }
             }
-
-            /* FlowRow(
-                 modifier = Modifier.padding(8.dp),
-                 maxItemsInEachRow = 3,
-                 horizontalArrangement = Arrangement.spacedBy(8.dp),
-                 verticalArrangement = Arrangement.spacedBy(10.dp)
-             ) {
-                 fields.forEach { field ->
-                     CommonTextField(
-                         modifier = Modifier,
-                         label = field.label,
-                         value = field.value,
-                         onValueChange = field.onValueChange
-                     )
-                 }
-             }
-             LazyVerticalGrid(
-                 columns = GridCells.Fixed(3),
-                 modifier = Modifier
-                     .fillMaxWidth()
-                     .heightIn(min = 300.dp),
-                 contentPadding = PaddingValues(10.dp),
-                 horizontalArrangement = Arrangement.spacedBy(8.dp),
-                 verticalArrangement = Arrangement.spacedBy(10.dp)
-             ) {
-                 items(fields) { field ->
-                     CommonTextField(
-                         label = field.label,
-                         value = field.value,
-                         onValueChange = field.onValueChange
-                     )
-                     CommonTextField(
-                         modifier = Modifier.fillMaxWidth(),
-                         label = "Amount",
-                         value = shirtAmt,
-                         onValueChange = { onShirtAmtChanged(it) }
-                     )
-                     CommonTextField (
-                         modifier = Modifier.fillMaxWidth(),
-                         label = "Chest",
-                         value = shirtChest,
-                         onValueChange = { onShirtChestChanged(it) }
-                     )
-                     CommonTextField (
-                         modifier = Modifier.fillMaxWidth(),
-                         label = "Length",
-                         value = shirtLength,
-                         onValueChange = { onShirtLengthChanged(it) }
-                     )
-                     CommonTextField (
-                         modifier = Modifier.fillMaxWidth(),
-                         label = "Shoulder",
-                         value = shirtShoulder,
-                         onValueChange = { onShirtShoulderChanged(it) }
-                     )
-                     CommonTextField (
-                         modifier = Modifier.fillMaxWidth(),
-                         label = "Sleeve",
-                         value = shirtSleeve,
-                         onValueChange = { onShirtSleeveChanged(it) }
-                     )
-                     CommonTextField (
-                         modifier = Modifier.fillMaxWidth(),
-                         label = "Cuff",
-                         value = shirtCuff,
-                         onValueChange = { onShirtCuffChanged(it) }
-                     )
-                     CommonTextField (
-                         modifier = Modifier.fillMaxWidth(),
-                         label = "Collar",
-                         value = shirtCollar,
-                         onValueChange = { onShirtCollarChanged(it) }
-                     )
-                     CommonTextField (
-                         modifier = Modifier.fillMaxWidth(),
-                         label = "Back",
-                         value = shirtBack,
-                         onValueChange = { onShirtBackChanged(it) }
-                     )
-                     CommonTextField (
-                         modifier = Modifier.fillMaxWidth(),
-                         label = "Front 1",
-                         value = shirtFront1,
-                         onValueChange = { onShirtFront1Changed(it) }
-                     )
-                     CommonTextField (
-                         modifier = Modifier.fillMaxWidth(),
-                         label = "Front 2",
-                         value = shirtFront2,
-                         onValueChange = { onShirtFront2Changed(it) }
-                     )
-                     CommonTextField (
-                         modifier = Modifier.fillMaxWidth(),
-                         label = "Front 3",
-                         value = shirtFront3,
-                         onValueChange = { onShirtFront3Changed(it) }
-                     )
-                 }*/
         }
     }
 }
@@ -811,57 +714,6 @@ fun DatePickerField(
                 .matchParentSize()
                 .clickable(onClick = { showDialog = true })
         )
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun GenderDropdown(
-    selectedGender: String,
-    onGenderSelected: (String) -> Unit,
-    modifier: Modifier
-) {
-    val uiColor = if (isSystemInDarkTheme()) SoftGolden else DarkBrown
-    val genders = listOf("Male", "Female", "Other")
-    var expanded by remember { mutableStateOf(false) }
-
-    ExposedDropdownMenuBox(
-        modifier = modifier,
-        expanded = expanded,
-        onExpandedChange = { expanded = !expanded }
-    ) {
-        OutlinedTextField(
-            value = selectedGender,
-            onValueChange = { onGenderSelected(it) },
-            readOnly = true,
-            label = { Text("Gender", style = MaterialTheme.typography.labelMedium, color = uiColor) },
-            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded) },
-            modifier = Modifier
-                .menuAnchor(),
-            colors = OutlinedTextFieldDefaults.colors(
-                unfocusedPlaceholderColor = uiColor.copy(alpha = 0.5f),
-                focusedPlaceholderColor = uiColor,
-                unfocusedContainerColor = if (isSystemInDarkTheme()) MaterialTheme.colorScheme.textFieldContainer else White,
-                focusedContainerColor = if (isSystemInDarkTheme()) MaterialTheme.colorScheme.textFieldContainer else White,
-                focusedBorderColor = uiColor,
-                unfocusedBorderColor = uiColor.copy(alpha = 0.5f),
-            ),
-        )
-
-        ExposedDropdownMenu(
-            expanded = expanded,
-            onDismissRequest = { expanded = false }
-        ) {
-            genders.forEach { gender ->
-                DropdownMenuItem(
-                    text = { Text(text = gender) },
-                    onClick = {
-                        onGenderSelected(gender)
-                        expanded = false
-                    }
-                )
-            }
-        }
     }
 }
 

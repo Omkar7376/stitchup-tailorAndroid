@@ -8,5 +8,4 @@ data class CustomersUiState(
     val customers: List<CustomerDataDto> = emptyList(),
     val error: String? = null,
     val message: String? = null,
-    val customerDetails: GetCustomerDetailsResponse? = null,
 )

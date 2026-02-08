@@ -9,11 +9,15 @@ import com.tailorapp.stitchup.data.repo.authRepo.RegisterRepoImp
 import com.tailorapp.stitchup.data.repo.customerRepo.AddCustomerRepoImp
 import com.tailorapp.stitchup.data.repo.customerRepo.CustomersListRepoImp
 import com.tailorapp.stitchup.data.repo.customerRepo.GetCustomerDetailsRepoImp
+import com.tailorapp.stitchup.data.repo.customerRepo.UpdateCustomerRepoImp
+import com.tailorapp.stitchup.data.repo.customerRepo.UpdateShirtRepoImp
 import com.tailorapp.stitchup.domain.repo.authRepo.LoginRepo
 import com.tailorapp.stitchup.domain.repo.authRepo.RegisterRepo
 import com.tailorapp.stitchup.domain.repo.customerRepo.AddCustomerRepo
 import com.tailorapp.stitchup.domain.repo.customerRepo.CustomersListRepo
 import com.tailorapp.stitchup.domain.repo.customerRepo.GetCustomerDetailsRepo
+import com.tailorapp.stitchup.domain.repo.customerRepo.UpdateCustomerRepo
+import com.tailorapp.stitchup.domain.repo.customerRepo.UpdateShirtRepo
 import com.tailorapp.stitchup.retrofit.ApiKeyInterceptor
 import dagger.Module
 import dagger.Provides
@@ -84,4 +88,13 @@ object NetworkModule {
     fun provideGetCustomerDetailsRepo(api: CustomerApiService): GetCustomerDetailsRepo =
         GetCustomerDetailsRepoImp(api)
 
+    @Provides
+    @Singleton
+    fun provideUpdateCustomerRepo(api: CustomerApiService): UpdateCustomerRepo =
+        UpdateCustomerRepoImp(api)
+
+    @Provides
+    @Singleton
+    fun provideUpdateShirtRepo(api: CustomerApiService): UpdateShirtRepo =
+        UpdateShirtRepoImp(api)
 }

@@ -61,12 +61,12 @@ fun CustomersScreen(
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
     val isRefreshing = uiState.isLoading
-    val pullRefreshState = rememberPullToRefreshState ()
+    val pullRefreshState = rememberPullToRefreshState()
 
     LaunchedEffect(uiState.message) {
         uiState.message?.let { errorMessage ->
             snackbarHostState.showSnackbar(errorMessage)
-            if (uiState.customers.isEmpty()){
+            if (uiState.customers.isEmpty()) {
                 scope.launch {
                     snackbarHostState.showSnackbar("Customers not found")
                 }
@@ -90,9 +90,9 @@ fun CustomersScreen(
                     Icon(
                         modifier = Modifier
                             .padding(start = 10.dp, end = 10.dp)
-                            .clickable{
-                            navController.popBackStack()
-                        },
+                            .clickable {
+                                navController.popBackStack()
+                            },
                         imageVector = Icons.Default.ArrowBack,
                         contentDescription = null,
                         tint = uiColor,
@@ -101,48 +101,48 @@ fun CustomersScreen(
             )
         }
     ) { innerPadding ->
-            Column (
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding)
+                .padding(16.dp)
+        ) {
+            SearchBar(
+                query = searchQuery,
+                onQueryChange = { newQuery ->
+                    searchQuery = newQuery
+                    viewModel.search(newQuery)
+                },
+                placeholderText = "Search Customers"
+            )
+            Spacer(modifier = Modifier.height(MaterialTheme.dimens.small2))
+
+            PullToRefreshBox(
                 modifier = Modifier
-                    .fillMaxSize()
-                    .padding(innerPadding)
-                    .padding(16.dp)
+                    .fillMaxSize(),
+                state = pullRefreshState,
+                isRefreshing = isRefreshing,
+                onRefresh = { viewModel.getCustomers() },
+                contentAlignment = Alignment.TopCenter,
             ) {
-                SearchBar(
-                    query = searchQuery,
-                    onQueryChange = { newQuery ->
-                        searchQuery = newQuery
-                        viewModel.search(newQuery)
-                    },
-                    placeholderText = "Search Customers"
-                )
-                Spacer(modifier = Modifier.height(MaterialTheme.dimens.small2))
-
-                PullToRefreshBox (
-                    modifier = Modifier
-                        .fillMaxSize(),
-                    state = pullRefreshState,
-                    isRefreshing = isRefreshing,
-                    onRefresh = { viewModel.getCustomers() },
-                    contentAlignment = Alignment.TopCenter,
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize(),
+                    contentPadding = PaddingValues(bottom = 80.dp)
                 ) {
-                    LazyColumn(
-                        modifier = Modifier.fillMaxSize(),
-                        contentPadding = PaddingValues(bottom = 80.dp)
-                    ) {
-
-                        items(uiState.customers) { customer ->
-                            CustomersItem(
-                                bookNumber = customer.BOOKNO,
-                                name = customer.NAME,
-                                mobile = customer.MOB_NO,
-                                onClick = {
-                                    navController.navigate("customerDetails/${customer.ID}"){
-                                        popUpTo("customers"){ inclusive = true }
-                                    }
+                    
+                    items(uiState.customers) { customer ->
+                        CustomersItem(
+                            bookNumber = customer.BOOKNO,
+                            name = customer.NAME,
+                            mobile = customer.MOB_NO,
+                            onClick = {
+                                navController.navigate("customerDetails/${customer.ID}") {
+                                    popUpTo("customers") { inclusive = true }
                                 }
-                            )
-                        }
+                            }
+                        )
                     }
+                }
             }
         }
     }
