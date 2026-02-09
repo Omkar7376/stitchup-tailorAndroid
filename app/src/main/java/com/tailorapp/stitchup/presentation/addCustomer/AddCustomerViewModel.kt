@@ -46,7 +46,6 @@ class AddCustomerViewModel @Inject constructor(private val addCustomerUseCase: A
         val state = _uiState.value
         when {
             state.name.isBlank() -> return sendMessage("Name is Required")
-            state.age.isBlank() -> return sendMessage("Age is Required")
             state.gender.isBlank() -> return sendMessage("Gender is Required")
             state.mobile.isBlank() -> return sendMessage("Mobile is Required")
             state.address.isBlank() -> return sendMessage("Address is Required")
@@ -94,7 +93,6 @@ class AddCustomerViewModel @Inject constructor(private val addCustomerUseCase: A
 
         val request = AddCustomerRequestDto(
             name = state.name,
-            age = state.age.toIntOrNull() ?: 0,
             gender = state.gender,
             mob_num = state.mobile,
             address = state.address,
@@ -102,6 +100,10 @@ class AddCustomerViewModel @Inject constructor(private val addCustomerUseCase: A
                 orderDate = state.orderDate,
                 deliveryDate = state.deliveryDate,
                 orderType = state.orderType,
+                shirtQnt = state.shirtQty.toFloatOrNull() ?: 0,
+                shirtAmount = state.shirtAmt.toFloatOrNull() ?: 0,
+                pantQnt = state.pantQty.toFloatOrNull() ?: 0,
+                pantAmount = state.pantAmt.toFloatOrNull() ?: 0,
                 advanceAmount = state.advance.toFloatOrNull() ?: 0,
                 discount = state.discount.toFloatOrNull() ?: 0,
                 status = "isPending",
@@ -110,7 +112,6 @@ class AddCustomerViewModel @Inject constructor(private val addCustomerUseCase: A
             shirtMeasurement =
                 if (state.orderType == "Shirt" || state.orderType == "Both") {
                     ShirtMeasurementDto(
-                        amount = state.shirtAmt.toFloatOrNull() ?: 0,
                         chest = state.shirtChest.toFloatOrNull() ?: 0,
                         collar = state.shirtCollar.toFloatOrNull() ?: 0,
                         back = state.shirtBack.toFloatOrNull() ?: 0,
@@ -119,7 +120,6 @@ class AddCustomerViewModel @Inject constructor(private val addCustomerUseCase: A
                         front2 = state.shirtFront2.toFloatOrNull() ?: 0,
                         front3 = state.shirtFront3.toFloatOrNull() ?: 0,
                         length = state.shirtLength.toFloatOrNull() ?: 0,
-                        shirtQnt = state.shirtQty.toFloatOrNull() ?: 0,
                         shoulder = state.shirtShoulder.toFloatOrNull() ?: 0,
                         sleeve = state.shirtSleeve.toFloatOrNull() ?: 0,
                     )
@@ -128,7 +128,6 @@ class AddCustomerViewModel @Inject constructor(private val addCustomerUseCase: A
             pantMeasurement =
                 if (state.orderType == "Pant" || state.orderType == "Both") {
                     PantMeasurementDto(
-                        amount = state.pantAmt.toFloatOrNull() ?: 0,
                         bottom = state.pantBottom.toFloatOrNull() ?: 0,
                         knee = state.pantKnee.toFloatOrNull() ?: 0,
                         outsideLength = state.pantOutsideLength.toFloatOrNull() ?: 0,
@@ -137,7 +136,6 @@ class AddCustomerViewModel @Inject constructor(private val addCustomerUseCase: A
                         thigh = state.pantThigh.toFloatOrNull() ?: 0,
                         waist = state.pantWaist.toFloatOrNull() ?: 0,
                         rise = state.pantRise.toFloatOrNull() ?: 0,
-                        PantQnt = state.pantQty.toFloatOrNull() ?: 0,
                     )
                 } else null
         )
@@ -150,10 +148,6 @@ class AddCustomerViewModel @Inject constructor(private val addCustomerUseCase: A
 
     fun onNameChanged(value: String) {
         _uiState.update { it.copy(name = value) }
-    }
-
-    fun onAgeChanged(value: String) {
-        _uiState.update { it.copy(age = value) }
     }
 
     fun onGenderChanged(value: String) {

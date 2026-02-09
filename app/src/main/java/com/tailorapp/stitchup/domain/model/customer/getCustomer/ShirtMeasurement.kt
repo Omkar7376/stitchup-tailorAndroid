@@ -1,7 +1,6 @@
 package com.tailorapp.stitchup.domain.model.customer.getCustomer
 
 data class ShirtMeasurement(
-    val AMOUNT: Int,
     val BACK: Any,
     val BICEP: Any,
     val CHEST: Any,

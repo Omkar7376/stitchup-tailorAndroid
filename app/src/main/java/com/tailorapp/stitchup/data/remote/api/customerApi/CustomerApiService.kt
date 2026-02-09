@@ -6,6 +6,8 @@ import com.tailorapp.stitchup.data.remote.dto.customerDto.customerList.GetCustom
 import com.tailorapp.stitchup.data.remote.dto.customerDto.getCustomerDetails.GetCustomerDetailsResponseDto
 import com.tailorapp.stitchup.data.remote.dto.customerDto.updateCustomerDto.UpdateCustomerRequestDto
 import com.tailorapp.stitchup.data.remote.dto.customerDto.updateCustomerDto.UpdateCustomerResponseDto
+import com.tailorapp.stitchup.data.remote.dto.customerDto.updatePantDto.UpdatePantRequestDto
+import com.tailorapp.stitchup.data.remote.dto.customerDto.updatePantDto.UpdatePantResponseDto
 import com.tailorapp.stitchup.data.remote.dto.customerDto.updateShirtDto.UpdateShirtResponseDto
 import com.tailorapp.stitchup.domain.model.customer.updateShirt.UpdateShirtRequest
 import com.tailorapp.stitchup.domain.model.customer.updateShirt.UpdateShirtResponse
@@ -41,4 +43,10 @@ interface CustomerApiService {
         @Path("id") id: Int,
         @Body updateShirtRequest: UpdateShirtRequest
     ): Response<UpdateShirtResponse>
+
+    @PUT("/pant/updatePantMeasurment/{id}")
+    suspend fun updatePantMeasurement(
+        @Path("id") id: Int,
+        @Body updatePantRequest: UpdatePantRequestDto
+    ): Response<UpdatePantResponseDto>
 }

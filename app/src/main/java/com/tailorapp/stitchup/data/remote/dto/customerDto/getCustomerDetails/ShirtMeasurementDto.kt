@@ -1,7 +1,6 @@
 package com.tailorapp.stitchup.data.remote.dto.customerDto.getCustomerDetails
 
 data class ShirtMeasurementDto(
-    val AMOUNT: Int,
     val BACK: Any,
     val BICEP: Any,
     val CHEST: Any,
@@ -13,7 +12,6 @@ data class ShirtMeasurementDto(
     val LENGTH: Any,
     val ORDER_ID: Any,
     val SHIRTID: Any,
-    val SHIRT_QNT: Any,
     val SHOULDER: Any,
     val SLEEVE: Any
 )

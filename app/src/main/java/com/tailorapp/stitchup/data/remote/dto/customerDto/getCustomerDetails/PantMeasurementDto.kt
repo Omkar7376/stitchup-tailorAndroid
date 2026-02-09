@@ -1,14 +1,12 @@
 package com.tailorapp.stitchup.data.remote.dto.customerDto.getCustomerDetails
 
 data class PantMeasurementDto(
-    val AMOUNT: Int,
     val BOTTOM: Any,
     val INSIDE_LENGTH: Any,
     val KNEE: Any,
     val ORDER_ID: Any,
     val OUTSIDE_LENGTH: Any,
     val PANTID: Any,
-    val PANT_QNT: Any,
     val RISE: Any,
     val SEAT: Any,
     val THIGH: Any,

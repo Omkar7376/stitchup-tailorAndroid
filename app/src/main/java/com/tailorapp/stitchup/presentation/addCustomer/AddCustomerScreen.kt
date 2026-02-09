@@ -135,13 +135,11 @@ fun AddCustomerScreen(
                 item {
                     CustomerDetails(
                         name = uiState.value.name,
-                        age = uiState.value.age,
                         gender = uiState.value.gender,
                         mobile = uiState.value.mobile,
                         address = uiState.value.address,
 
                         onNameChanged = { viewModel.onNameChanged(it) },
-                        onAgeChanged = { viewModel.onAgeChanged(it) },
                         onGenderChanged = { viewModel.onGenderChanged(it) },
                         onMobileChanged = { viewModel.onMobileChanged(it) },
                         onAddressChanged = { viewModel.onAddressChanged(it) },
@@ -162,8 +160,6 @@ fun AddCustomerScreen(
                 if (uiState.value.orderType == "Shirt" || uiState.value.orderType == "Both") {
                     item {
                         ShirtMeasurement(
-                            shirtQty = uiState.value.shirtQty,
-                            shirtAmt = uiState.value.shirtAmt,
                             shirtChest = uiState.value.shirtChest,
                             shirtLength = uiState.value.shirtLength,
                             shirtShoulder = uiState.value.shirtShoulder,
@@ -176,8 +172,6 @@ fun AddCustomerScreen(
                             shirtFront2 = uiState.value.shirtFront2,
                             shirtFront3 = uiState.value.shirtFront3,
 
-                            onShirtQtyChanged = { viewModel.onShirtQntChanged(it) },
-                            onShirtAmtChanged = { viewModel.onShirtAmtChanged(it) },
                             onShirtChestChanged = { viewModel.onShirtChestChanged(it) },
                             onShirtLengthChanged = { viewModel.onShirtLengthChanged(it) },
                             onShirtShoulderChanged = { viewModel.onShirtShoulderChanged(it) },
@@ -196,8 +190,6 @@ fun AddCustomerScreen(
                 if (uiState.value.orderType == "Pant" || uiState.value.orderType == "Both") {
                     item {
                         PantMeasurement(
-                            pantQty = uiState.value.pantQty,
-                            pantAmt = uiState.value.pantAmt,
                             pantOutsideLength = uiState.value.pantOutsideLength,
                             pantInsideLength = uiState.value.pantInsideLength,
                             pantRise = uiState.value.pantRise,
@@ -207,8 +199,6 @@ fun AddCustomerScreen(
                             pantKnee = uiState.value.pantKnee,
                             pantBottom = uiState.value.pantBottom,
 
-                            onPantQtyChanged = { viewModel.onPantQntChanged(it) },
-                            onPantAmtChanged = { viewModel.onPantAmtChanged(it) },
                             onPantOutsideLengthChanged = { viewModel.onPantOutsideChanged(it) },
                             onPantInsideLengthChanged = { viewModel.onPantInsideChanged(it) },
                             onPantRiseChanged = { viewModel.onPantRiseChanged(it) },
@@ -223,10 +213,18 @@ fun AddCustomerScreen(
 
                 item {
                     Payment(
+                        shirtQnt = uiState.value.shirtQty,
+                        shirtAmt = uiState.value.shirtAmt,
+                        pantQty = uiState.value.pantQty,
+                        pantAmt = uiState.value.pantAmt,
                         discount = uiState.value.discount,
                         advance = uiState.value.advance,
                         note = uiState.value.note,
 
+                        onShirtQntChanged = { viewModel.onShirtQntChanged(it) },
+                        onShirtAmtChanged = { viewModel.onShirtAmtChanged(it) },
+                        onPantQtyChanged = { viewModel.onPantQntChanged(it) },
+                        onPantAmtChanged = { viewModel.onPantAmtChanged(it) },
                         onDiscountChanged = { viewModel.onDiscountChanged(it) },
                         onAdvanceChanged = { viewModel.onAdvanceChanged(it) },
                         onNoteChanged = { viewModel.onNoteChanged(it) }
@@ -251,13 +249,11 @@ fun AddCustomerScreen(
 @Composable
 fun CustomerDetails(
     name: String,
-    age: String,
     gender: String,
     mobile: String,
     address: String,
 
     onNameChanged: (String) -> Unit,
-    onAgeChanged: (String) -> Unit,
     onGenderChanged: (String) -> Unit,
     onMobileChanged: (String) -> Unit,
     onAddressChanged: (String) -> Unit,
@@ -276,24 +272,18 @@ fun CustomerDetails(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        CommonTextField(
-            modifier = Modifier.weight(1f),
-            label = "Age",
-            value = age,
-            onValueChange = { onAgeChanged(it) },
-        )
         GenderDropdown(
             modifier = Modifier.weight(1f),
             selectedGender = gender,
             onGenderSelected = { onGenderChanged(it) }
         )
+        CommonTextField(
+            modifier = Modifier.weight(2f),
+            label = "Mobile",
+            value = mobile,
+            onValueChange = { onMobileChanged(it) },
+        )
     }
-    CommonTextField(
-        modifier = Modifier.fillMaxWidth(),
-        label = "Mobile",
-        value = mobile,
-        onValueChange = { onMobileChanged(it) },
-    )
     CommonTextField(
         modifier = Modifier.fillMaxWidth(),
         label = "Address",
@@ -344,8 +334,6 @@ fun OrderDetails(
 
 @Composable
 fun ShirtMeasurement(
-    shirtQty: String,
-    shirtAmt: String,
     shirtChest: String,
     shirtLength: String,
     shirtShoulder: String,
@@ -358,8 +346,6 @@ fun ShirtMeasurement(
     shirtFront2: String,
     shirtFront3: String,
 
-    onShirtQtyChanged: (String) -> Unit,
-    onShirtAmtChanged: (String) -> Unit,
     onShirtChestChanged: (String) -> Unit,
     onShirtLengthChanged: (String) -> Unit,
     onShirtShoulderChanged: (String) -> Unit,
@@ -373,8 +359,6 @@ fun ShirtMeasurement(
     onShirtFront3Changed: (String) -> Unit,
 ) {
     val fields = listOf(
-        MeasurementField("Quantity", shirtQty, onShirtQtyChanged),
-        MeasurementField("Amount", shirtAmt, onShirtAmtChanged),
         MeasurementField("Back", shirtBack, onShirtBackChanged),
         MeasurementField("Shoulder", shirtShoulder, onShirtShoulderChanged),
         MeasurementField("Collar", shirtCollar, onShirtCollarChanged),
@@ -430,8 +414,6 @@ fun ShirtMeasurement(
 
 @Composable
 fun PantMeasurement(
-    pantQty: String,
-    pantAmt: String,
     pantOutsideLength: String,
     pantInsideLength: String,
     pantRise: String,
@@ -441,8 +423,6 @@ fun PantMeasurement(
     pantKnee: String,
     pantBottom: String,
 
-    onPantQtyChanged: (String) -> Unit,
-    onPantAmtChanged: (String) -> Unit,
     onPantOutsideLengthChanged: (String) -> Unit,
     onPantInsideLengthChanged: (String) -> Unit,
     onPantRiseChanged: (String) -> Unit,
@@ -453,8 +433,6 @@ fun PantMeasurement(
     onPantBottomChanged: (String) -> Unit,
 ) {
     val fields = listOf(
-        MeasurementField("Quantity", pantQty, onPantQtyChanged),
-        MeasurementField("Amount", pantAmt, onPantAmtChanged),
         MeasurementField("Outside Len", pantOutsideLength, onPantOutsideLengthChanged),
         MeasurementField("Inside Length", pantInsideLength, onPantInsideLengthChanged),
         MeasurementField("Rise", pantRise, onPantRiseChanged),
@@ -566,16 +544,28 @@ fun PantMeasurement(
 
 @Composable
 fun Payment(
+    shirtQnt: String,
+    shirtAmt: String,
+    pantQty: String,
+    pantAmt: String,
     discount: String,
     advance: String,
     note: String,
 
+    onShirtQntChanged: (String) -> Unit,
+    onShirtAmtChanged: (String) -> Unit,
+    onPantQtyChanged: (String) -> Unit,
+    onPantAmtChanged: (String) -> Unit,
     onDiscountChanged: (String) -> Unit,
     onAdvanceChanged: (String) -> Unit,
     onNoteChanged: (String) -> Unit,
 ) {
     val uiColor = if (isSystemInDarkTheme()) SoftGolden else DarkBrown
     val fields = listOf(
+        MeasurementField("Shirt Quantity", shirtQnt, onShirtQntChanged),
+        MeasurementField("Shirt Amount", shirtAmt, onShirtAmtChanged),
+        MeasurementField("Pant Quantity", pantQty, onPantQtyChanged),
+        MeasurementField("Pant Amount", pantAmt, onPantAmtChanged),
         MeasurementField("Discount", discount, onDiscountChanged),
         MeasurementField("Advance", advance, onAdvanceChanged),
     )
@@ -591,7 +581,7 @@ fun Payment(
     ) {
         Text("Payment", style = MaterialTheme.typography.titleMedium)
 
-        fields.chunked(2).forEach { rowFields ->
+        fields.chunked(3).forEach { rowFields ->
             Row(
                 modifier = Modifier
                     .fillMaxWidth(),

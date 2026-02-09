@@ -17,9 +17,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.AlertDialog
@@ -49,6 +51,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.tailorapp.stitchup.data.remote.dto.customerDto.updateCustomerDto.UpdateCustomerRequestDto
+import com.tailorapp.stitchup.data.remote.dto.customerDto.updatePantDto.UpdatePantRequestDto
 import com.tailorapp.stitchup.domain.model.customer.getCustomer.GetCustomerDetailsResponse
 import com.tailorapp.stitchup.domain.model.customer.updateShirt.UpdateShirtRequest
 import com.tailorapp.stitchup.presentation.addCustomer.dataClasses.MeasurementField
@@ -68,6 +71,7 @@ fun CustomerProfileScreen(
     val uiState by viewModel.uiState.collectAsState()
     var showCustomerDialog by remember { mutableStateOf(false) }
     var showShirtDialog by remember { mutableStateOf(false) }
+    var showPantDialog by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
         viewModel.getCustomerDetails(id = customerId ?: 0)
@@ -116,9 +120,15 @@ fun CustomerProfileScreen(
                                 showCustomerDialog = true
                             },
                             onEditShirt = {
-                                val shirt = uiState.customerDetails?.shirtMeasurements?.firstOrNull()
+                                val shirt =
+                                    uiState.customerDetails?.shirtMeasurements?.firstOrNull()
                                 viewModel.setShirtForEditing(shirt!!)
                                 showShirtDialog = true
+                            },
+                            onEditPant = {
+                                val pant = uiState.customerDetails?.pantMeasurements?.firstOrNull()
+                                viewModel.setPantForEditing(pant!!)
+                                showPantDialog = true
                             }
                         )
                     }
@@ -146,13 +156,11 @@ fun CustomerProfileScreen(
     if (showCustomerDialog) {
         UpdateCustomer(
             name = uiState.name,
-            age = uiState.age,
             gender = uiState.gender,
             mobile = uiState.mobile,
             address = uiState.address,
 
             onNameChanged = viewModel::onNameChanged,
-            onAgeChanged = viewModel::onAgeChanged,
             onGenderChanged = viewModel::onGenderChanged,
             onMobileChanged = viewModel::onMobileChanged,
             onAddressChanged = viewModel::onAddressChanged,
@@ -160,7 +168,6 @@ fun CustomerProfileScreen(
             onUpdateClick = {
                 val request = UpdateCustomerRequestDto(
                     name = uiState.name,
-                    age = uiState.age.toIntOrNull() ?: 0,
                     gender = uiState.gender,
                     mob_num = uiState.mobile,
                     address = uiState.address
@@ -228,17 +235,64 @@ fun CustomerProfileScreen(
             }
         )
     }
+
+    if (showPantDialog) {
+        UpdatePant(
+            pantOutsideLength = uiState.pantOutsideLength,
+            pantInsideLength = uiState.pantInsideLength,
+            pantRise = uiState.pantRise,
+            pantWaist = uiState.pantWaist,
+            pantSeat = uiState.pantSeat,
+            pantThigh = uiState.pantThigh,
+            pantKnee = uiState.pantKnee,
+            pantBottom = uiState.pantBottom,
+
+            onPantOutsideLengthChanged = viewModel::onPantOutsideChanged,
+            onPantInsideLengthChanged = viewModel::onPantInsideChanged,
+            onPantRiseChanged = viewModel::onPantRiseChanged,
+            onPantWaistChanged = viewModel::onPantWaistChanged,
+            onPantSeatChanged = viewModel::onPantSeatChanged,
+            onPantThighChanged = viewModel::onPantThighChanged,
+            onPantKneeChanged = viewModel::onPantKneeChanged,
+            onPantBottomChanged = viewModel::onPantBottomChanged,
+
+            onUpdateClick = {
+                val request = UpdatePantRequestDto(
+                    outsideLength = uiState.pantOutsideLength.toFloatOrNull() ?: 0,
+                    bottom = uiState.pantBottom.toFloatOrNull() ?: 0,
+                    insideLength = uiState.pantInsideLength.toFloatOrNull() ?: 0,
+                    knee = uiState.pantKnee.toFloatOrNull() ?: 0,
+                    rise = uiState.pantRise.toFloatOrNull() ?: 0,
+                    seat = uiState.pantSeat.toFloatOrNull() ?: 0,
+                    thigh = uiState.pantThigh.toFloatOrNull() ?: 0,
+                    waist = uiState.pantWaist.toFloatOrNull() ?: 0,
+                )
+                viewModel.updatePantDetails(
+                    id = customerId ?: 0,
+                    updatePantRequest = request
+                )
+                showPantDialog = false
+            },
+            onDismiss = {
+                showPantDialog = false
+            }
+        )
+    }
 }
 
 @Composable
 fun CustomerDetailsContent(
     details: GetCustomerDetailsResponse,
     onEditCustomer: () -> Unit = {},
-    onEditShirt: () -> Unit = {}
+    onEditShirt: () -> Unit = {},
+    onEditPant: () -> Unit = {},
+    onAddShirtClick: () -> Unit = {},
+    onAddPantClick: () -> Unit = {}
 ) {
     val customer = details.customer.firstOrNull()
     val shirt = details.shirtMeasurements.firstOrNull()
     val pant = details.pantMeasurements.firstOrNull()
+    val uiColor = if (isSystemInDarkTheme()) SoftGolden else DarkBrown
 
     LazyColumn(
         modifier = Modifier
@@ -247,12 +301,13 @@ fun CustomerDetailsContent(
     ) {
         item {
             SectionCard(title = "Customer Details", onClick = onEditCustomer) {
+                InfoRow("Book No", customer?.BOOKNO)
                 InfoRow("Name", customer?.NAME)
-                InfoRow("Age", customer?.AGE)
                 InfoRow("Gender", customer?.GENDER)
                 InfoRow("Mobile", customer?.MOB_NO)
                 InfoRow("Address", customer?.ADDRESS)
-                InfoRow("Book No", customer?.BOOKNO)
+                InfoRow("Created Date", formatDate(customer?.CREATED_AT))
+                InfoRow("Updated Date", formatDate(customer?.UPDATED_AT))
             }
         }
 
@@ -260,34 +315,86 @@ fun CustomerDetailsContent(
             item {
                 SectionCard(title = "Shirt Measurements", onClick = onEditShirt) {
                     InfoRow("Back", shirt.BACK)
+                    InfoRow("Shoulder", shirt.SHOULDER)
+                    InfoRow("Collar", shirt.COLLAR)
                     InfoRow("Chest", shirt.CHEST)
                     InfoRow("Length", shirt.LENGTH)
-                    InfoRow("Bicep", shirt.BICEP)
                     InfoRow("Sleeve", shirt.SLEEVE)
+                    InfoRow("Bicep", shirt.BICEP)
                     InfoRow("Cuff", shirt.CUFF)
-                    InfoRow("Collar", shirt.COLLAR)
-                    InfoRow("Shoulder", shirt.SHOULDER)
                     InfoRow("Front1", shirt.FRONT1)
                     InfoRow("Front2", shirt.FRONT2)
                     InfoRow("Front3", shirt.FRONT3)
                 }
             }
-        } else null
+        } else {
+            item {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.End,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text("Add Shirt Measurement", color = uiColor, fontWeight = FontWeight.Bold)
+                    IconButton(
+                        onClick = onAddShirtClick
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Add,
+                            contentDescription = null,
+                            tint = uiColor,
+                            modifier = Modifier.size(20.dp)
+                        )
+                    }
+                }
+            }
+        }
 
         if (pant != null) {
             item {
-                SectionCard(title = "Pant Measurements", onClick = {}) {
-                    InfoRow("Waist", pant.WAIST)
-                    InfoRow("Thigh", pant.THIGH)
-                    InfoRow("Seat", pant.SEAT)
-                    InfoRow("Rise", pant.RISE)
-                    InfoRow("Inside Length", pant.INSIDE_LENGTH)
+                SectionCard(title = "Pant Measurements", onClick = onEditPant) {
                     InfoRow("Outside Length", pant.OUTSIDE_LENGTH)
+                    InfoRow("Inside Length", pant.INSIDE_LENGTH)
+                    InfoRow("Rise", pant.RISE)
+                    InfoRow("Waist", pant.WAIST)
+                    InfoRow("Seat", pant.SEAT)
+                    InfoRow("Thigh", pant.THIGH)
                     InfoRow("Knee", pant.KNEE)
                     InfoRow("Bottom", pant.BOTTOM)
                 }
             }
+        } else {
+            item {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.End,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text("Add Pant Measurement")
+                    IconButton(
+                        onClick = onAddPantClick
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Add,
+                            contentDescription = null,
+                            tint = uiColor,
+                            modifier = Modifier.size(20.dp)
+                        )
+                    }
+                }
+            }
         }
+    }
+}
+
+fun formatDate(dateString: String?): String {
+    if (dateString.isNullOrBlank()) return "N/A"
+    return try {
+        if (dateString.contains("T")) dateString.substringBefore("T")
+        else dateString.take(10)
+    } catch (e: Exception) {
+        "N/A"
     }
 }
 
@@ -356,13 +463,11 @@ fun InfoRow(label: String, value: Any?) {
 @Composable
 fun UpdateCustomer(
     name: String,
-    age: String,
     gender: String,
     mobile: String,
     address: String,
 
     onNameChanged: (String) -> Unit,
-    onAgeChanged: (String) -> Unit,
     onGenderChanged: (String) -> Unit,
     onMobileChanged: (String) -> Unit,
     onAddressChanged: (String) -> Unit,
@@ -374,7 +479,7 @@ fun UpdateCustomer(
 
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text(text = "Update Customer") },
+        title = { Text(text = "Edit Customer Details") },
         text = {
             Column(
                 modifier = Modifier
@@ -396,12 +501,6 @@ fun UpdateCustomer(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    CommonTextField(
-                        modifier = Modifier.weight(1f),
-                        label = "Age",
-                        value = age,
-                        onValueChange = { onAgeChanged(it) },
-                    )
                     GenderDropdown(
                         modifier = Modifier.weight(1f),
                         selectedGender = gender,
@@ -474,14 +573,14 @@ fun UpdateShirt(
         MeasurementField("Back", shirtBack, onShirtBackChanged),
         MeasurementField("Shoulder", shirtShoulder, onShirtShoulderChanged),
         MeasurementField("Collar", shirtCollar, onShirtCollarChanged),
-        MeasurementField("Length", shirtLength, onShirtLengthChanged),
         MeasurementField("Chest", shirtChest, onShirtChestChanged),
-        MeasurementField("Front1", shirtFront1, onShirtFront1Changed),
-        MeasurementField("Front2", shirtFront2, onShirtFront2Changed),
-        MeasurementField("Front3", shirtFront3, onShirtFront3Changed),
+        MeasurementField("Length", shirtLength, onShirtLengthChanged),
         MeasurementField("Sleeve", shirtSleeve, onShirtSleeveChanged),
         MeasurementField("Bicep", shirtBicep, onShirtBicepChanged),
         MeasurementField("Cuff", shirtCuff, onShirtCuffChanged),
+        MeasurementField("Front1", shirtFront1, onShirtFront1Changed),
+        MeasurementField("Front2", shirtFront2, onShirtFront2Changed),
+        MeasurementField("Front3", shirtFront3, onShirtFront3Changed),
     )
 
     val uiColor = if (isSystemInDarkTheme()) SoftGolden else DarkBrown
@@ -489,7 +588,7 @@ fun UpdateShirt(
     AlertDialog(
         modifier = Modifier.fillMaxWidth(),
         onDismissRequest = onDismiss,
-        title = { Text(text = "Update Customer") },
+        title = { Text(text = "Edit Shirt Details") },
         text = {
             Column(
                 modifier = Modifier
@@ -537,6 +636,219 @@ fun UpdateShirt(
                 }
             ) {
                 Text("Update", color = uiColor)
+            }
+        },
+        dismissButton = {
+            TextButton(
+                onClick = onDismiss
+            ) {
+                Text("Cancel", color = uiColor)
+            }
+        }
+    )
+}
+
+@Composable
+fun UpdatePant(
+    pantOutsideLength: String,
+    pantInsideLength: String,
+    pantRise: String,
+    pantWaist: String,
+    pantSeat: String,
+    pantThigh: String,
+    pantKnee: String,
+    pantBottom: String,
+
+    onPantOutsideLengthChanged: (String) -> Unit,
+    onPantInsideLengthChanged: (String) -> Unit,
+    onPantRiseChanged: (String) -> Unit,
+    onPantWaistChanged: (String) -> Unit,
+    onPantSeatChanged: (String) -> Unit,
+    onPantThighChanged: (String) -> Unit,
+    onPantKneeChanged: (String) -> Unit,
+    onPantBottomChanged: (String) -> Unit,
+
+    onUpdateClick: () -> Unit,
+    onDismiss: () -> Unit
+) {
+    val fields = listOf(
+        MeasurementField("Outside Length", pantOutsideLength, onPantOutsideLengthChanged),
+        MeasurementField("Inside Length", pantInsideLength, onPantInsideLengthChanged),
+        MeasurementField("Rise", pantRise, onPantRiseChanged),
+        MeasurementField("Waist", pantWaist, onPantWaistChanged),
+        MeasurementField("Seat", pantSeat, onPantSeatChanged),
+        MeasurementField("Thigh", pantThigh, onPantThighChanged),
+        MeasurementField("Knee", pantKnee, onPantKneeChanged),
+        MeasurementField("Bottom", pantBottom, onPantBottomChanged),
+    )
+
+    val uiColor = if (isSystemInDarkTheme()) SoftGolden else DarkBrown
+
+    AlertDialog(
+        modifier = Modifier.fillMaxWidth(),
+        onDismissRequest = onDismiss,
+        title = { Text(text = "Update Pant Details") },
+        text = {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .border(
+                        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
+                        shape = RoundedCornerShape(8.dp)
+                    )
+                    .padding(6.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+
+                Text("Pant Measurement", style = MaterialTheme.typography.titleMedium)
+
+                fields.chunked(3).forEach { rowFields ->
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(6.dp)
+                    ) {
+                        rowFields.forEach { field ->
+                            Box(
+                                modifier = Modifier.weight(1f)
+                            ) {
+                                CommonTextField(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    label = field.label,
+                                    value = field.value,
+                                    onValueChange = field.onValueChange
+                                )
+                            }
+                        }
+
+                        repeat(3 - rowFields.size) {
+                            Spacer(modifier = Modifier.weight(1f))
+                        }
+                    }
+                }
+            }
+        },
+        confirmButton = {
+            TextButton(
+                onClick = {
+                    onUpdateClick()
+                }
+            ) {
+                Text("Update", color = uiColor)
+            }
+        },
+        dismissButton = {
+            TextButton(
+                onClick = onDismiss
+            ) {
+                Text("Cancel", color = uiColor)
+            }
+        }
+    )
+}
+
+@Composable
+fun AddShirt(
+    shirtQnt: String,
+    shirtAmt: String,
+    shirtChest: String,
+    shirtLength: String,
+    shirtShoulder: String,
+    shirtSleeve: String,
+    shirtBicep: String,
+    shirtCuff: String,
+    shirtCollar: String,
+    shirtBack: String,
+    shirtFront1: String,
+    shirtFront2: String,
+    shirtFront3: String,
+
+    onShirtQntChanged: (String) -> Unit,
+    onShirtAmtChanged: (String) -> Unit,
+    onShirtChestChanged: (String) -> Unit,
+    onShirtLengthChanged: (String) -> Unit,
+    onShirtShoulderChanged: (String) -> Unit,
+    onShirtSleeveChanged: (String) -> Unit,
+    onShirtBicepChanged: (String) -> Unit,
+    onShirtCuffChanged: (String) -> Unit,
+    onShirtCollarChanged: (String) -> Unit,
+    onShirtBackChanged: (String) -> Unit,
+    onShirtFront1Changed: (String) -> Unit,
+    onShirtFront2Changed: (String) -> Unit,
+    onShirtFront3Changed: (String) -> Unit,
+
+    onAddClick: () -> Unit,
+    onDismiss: () -> Unit
+) {
+    val fields = listOf(
+        MeasurementField("Quantity", shirtQnt, onShirtQntChanged),
+        MeasurementField("Amount", shirtAmt, onShirtAmtChanged),
+        MeasurementField("Back", shirtBack, onShirtBackChanged),
+        MeasurementField("Shoulder", shirtShoulder, onShirtShoulderChanged),
+        MeasurementField("Collar", shirtCollar, onShirtCollarChanged),
+        MeasurementField("Chest", shirtChest, onShirtChestChanged),
+        MeasurementField("Length", shirtLength, onShirtLengthChanged),
+        MeasurementField("Sleeve", shirtSleeve, onShirtSleeveChanged),
+        MeasurementField("Bicep", shirtBicep, onShirtBicepChanged),
+        MeasurementField("Cuff", shirtCuff, onShirtCuffChanged),
+        MeasurementField("Front1", shirtFront1, onShirtFront1Changed),
+        MeasurementField("Front2", shirtFront2, onShirtFront2Changed),
+        MeasurementField("Front3", shirtFront3, onShirtFront3Changed),
+    )
+
+    val uiColor = if (isSystemInDarkTheme()) SoftGolden else DarkBrown
+
+    AlertDialog(
+        modifier = Modifier.fillMaxWidth(),
+        onDismissRequest = onDismiss,
+        title = { Text(text = "Add Shirt Details") },
+        text = {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .border(
+                        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
+                        shape = RoundedCornerShape(8.dp)
+                    )
+                    .padding(6.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+
+                Text("Shirt Measurement", style = MaterialTheme.typography.titleMedium)
+
+                fields.chunked(3).forEach { rowFields ->
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(6.dp)
+                    ) {
+                        rowFields.forEach { field ->
+                            Box(
+                                modifier = Modifier.weight(1f)
+                            ) {
+                                CommonTextField(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    label = field.label,
+                                    value = field.value,
+                                    onValueChange = field.onValueChange
+                                )
+                            }
+                        }
+
+                        repeat(3 - rowFields.size) {
+                            Spacer(modifier = Modifier.weight(1f))
+                        }
+                    }
+                }
+            }
+        },
+        confirmButton = {
+            TextButton(
+                onClick = {
+                    onAddClick()
+                }
+            ) {
+                Text("Add", color = uiColor)
             }
         },
         dismissButton = {

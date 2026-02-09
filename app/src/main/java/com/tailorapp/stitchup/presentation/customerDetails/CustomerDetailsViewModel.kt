@@ -5,11 +5,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.tailorapp.stitchup.constant.Resource
 import com.tailorapp.stitchup.data.remote.dto.customerDto.updateCustomerDto.UpdateCustomerRequestDto
+import com.tailorapp.stitchup.data.remote.dto.customerDto.updatePantDto.UpdatePantRequestDto
 import com.tailorapp.stitchup.domain.model.customer.getCustomer.CustomerDetails
+import com.tailorapp.stitchup.domain.model.customer.getCustomer.PantMeasurement
 import com.tailorapp.stitchup.domain.model.customer.getCustomer.ShirtMeasurement
 import com.tailorapp.stitchup.domain.model.customer.updateShirt.UpdateShirtRequest
 import com.tailorapp.stitchup.domain.usecase.customer.GetCustomerDetailsUseCase
 import com.tailorapp.stitchup.domain.usecase.customer.UpdateCustomerUseCase
+import com.tailorapp.stitchup.domain.usecase.customer.UpdatePantUseCase
 import com.tailorapp.stitchup.domain.usecase.customer.UpdateShirtUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -23,7 +26,8 @@ import javax.inject.Inject
 class CustomerDetailsViewModel @Inject constructor(
     private val getCustomerDetailsUseCase: GetCustomerDetailsUseCase,
     private val updateCustomerUseCase: UpdateCustomerUseCase,
-    private val updateShirtUseCase: UpdateShirtUseCase
+    private val updateShirtUseCase: UpdateShirtUseCase,
+    private val updatePantUseCase: UpdatePantUseCase
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(CustomerDetailsUiState())
     val uiState: StateFlow<CustomerDetailsUiState> = _uiState.asStateFlow()
@@ -36,17 +40,17 @@ class CustomerDetailsViewModel @Inject constructor(
                         _uiState.value = _uiState.value.copy(isLoading = true)
                         Log.d("###", "getCustomerDetails: Loading")
                     }
-
                     is Resource.Success -> {
                         _uiState.value = _uiState.value.copy(
-                            isLoading = false, customerDetails = result.data, error = null
+                            isLoading = false,
+                            customerDetails = result.data,
+                            error = null
                         )
                         Log.d("###", "getCustomerDetails: ${result.data}")
                         Log.d("###", "getCustomerDetails: ${result.data?.customer}")
                         Log.d("###", "getCustomerDetails: ${result.data?.shirtMeasurements}")
                         Log.d("###", "getCustomerDetails: ${result.data?.pantMeasurements}")
                     }
-
                     is Resource.Error -> {
                         _uiState.value = uiState.value.copy(error = result.message)
                         Log.d("###", "getCustomerDetails: ${result.message}")
@@ -97,6 +101,7 @@ class CustomerDetailsViewModel @Inject constructor(
                         _uiState.value = _uiState.value.copy(isLoading = true)
                         Log.d("###", "updateShirtDetails: Loading")
                     }
+
                     is Resource.Success -> {
                         _uiState.value = _uiState.value.copy(
                             isLoading = false,
@@ -107,6 +112,7 @@ class CustomerDetailsViewModel @Inject constructor(
                         getCustomerDetails(id)
                         Log.d("###", "updateShirtDetails: ${result.data}")
                     }
+
                     is Resource.Error -> {
                         _uiState.value = uiState.value.copy(
                             isLoading = false,
@@ -119,25 +125,48 @@ class CustomerDetailsViewModel @Inject constructor(
         }
     }
 
+    fun updatePantDetails(id: Int, updatePantRequest: UpdatePantRequestDto) {
+        viewModelScope.launch {
+            updatePantUseCase.updatePantMeasurement(id, updatePantRequest).collect { result ->
+                when (result) {
+                    is Resource.Loading -> {
+                        _uiState.value = _uiState.value.copy(isLoading = true)
+                        Log.d("###", "updatePantDetails: Loading")
+                    }
+                    is Resource.Success -> {
+                        _uiState.value = _uiState.value.copy(
+                            isLoading = false,
+                            error = null,
+                            updatePantDetails = result.data,
+                            isUpdateSuccess = true
+                        )
+                        getCustomerDetails(id)
+                    }
+                    is Resource.Error -> {
+                        _uiState.value = uiState.value.copy(
+                            isLoading = false,
+                            error = result.message,
+                        )
+                        Log.d("###", "updatePantDetails: ${result.message}")
+                    }
+                }
+            }
+        }
+    }
+
     fun setCustomerForEditing(oldCustomer: CustomerDetails?) {
         val customer = _uiState.value.customerDetails?.customer?.firstOrNull()
 
         _uiState.value = _uiState.value.copy(
             name = customer?.NAME ?: "",
-            age = customer?.AGE?.toString() ?: "",
             gender = customer?.GENDER ?: "",
             mobile = customer?.MOB_NO ?: "",
-            address = customer?.ADDRESS ?: ""
+            address = customer?.ADDRESS ?: "",
         )
     }
 
-
     fun onNameChanged(value: String) {
         _uiState.update { it.copy(name = value) }
-    }
-
-    fun onAgeChanged(value: String) {
-        _uiState.update { it.copy(age = value) }
     }
 
     fun onGenderChanged(value: String) {
@@ -147,6 +176,7 @@ class CustomerDetailsViewModel @Inject constructor(
     fun onMobileChanged(value: String) {
         _uiState.update { it.copy(mobile = value) }
     }
+
 
     fun onAddressChanged(value: String) {
         _uiState.update { it.copy(address = value) }
@@ -211,5 +241,55 @@ class CustomerDetailsViewModel @Inject constructor(
 
     fun onShirtFront3Changed(value: String) {
         _uiState.update { it.copy(shirtFront3 = value) }
+    }
+
+    fun setPantForEditing(oldPant: PantMeasurement) {
+        val pant = _uiState.value.customerDetails?.pantMeasurements?.firstOrNull()
+        _uiState.value = _uiState.value.copy(
+            pantOutsideLength = pant?.OUTSIDE_LENGTH?.toString() ?: "",
+            pantInsideLength = pant?.INSIDE_LENGTH?.toString() ?: "",
+            pantWaist = pant?.WAIST?.toString() ?: "",
+            pantSeat = pant?.SEAT?.toString() ?: "",
+            pantRise = pant?.RISE?.toString() ?: "",
+            pantKnee = pant?.KNEE?.toString() ?: "",
+            pantThigh = pant?.THIGH?.toString() ?: "",
+            pantBottom = pant?.BOTTOM?.toString() ?: "",
+        )
+    }
+
+    fun onPantOutsideChanged(value: String) {
+        _uiState.update { it.copy(pantOutsideLength = value) }
+    }
+
+    fun onPantInsideChanged(value: String) {
+        _uiState.update { it.copy(pantInsideLength = value) }
+    }
+
+    fun onPantRiseChanged(value: String) {
+        _uiState.update { it.copy(pantRise = value) }
+    }
+
+    fun onPantWaistChanged(value: String) {
+        _uiState.update { it.copy(pantWaist = value) }
+    }
+
+    fun onPantSeatChanged(value: String) {
+        _uiState.update { it.copy(pantSeat = value) }
+    }
+
+    fun onPantThighChanged(value: String) {
+        _uiState.update { it.copy(pantThigh = value) }
+    }
+
+    fun onPantKneeChanged(value: String) {
+        _uiState.update { it.copy(pantKnee = value) }
+    }
+
+    fun onPantBottomChanged(value: String) {
+        _uiState.update { it.copy(pantBottom = value) }
+    }
+
+    fun sendMessage(message: String) {
+        _uiState.update { it.copy(message = message) }
     }
 }

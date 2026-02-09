@@ -7,5 +7,9 @@ data class OrderDto(
     val note: String,
     val orderDate: String,
     val orderType: String,
+    val shirtQnt: Any,
+    val shirtAmount: Any,
+    val pantQnt: Any,
+    val pantAmount: Any,
     val status: String
 )

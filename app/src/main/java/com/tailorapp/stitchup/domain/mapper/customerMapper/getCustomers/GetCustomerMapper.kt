@@ -16,8 +16,9 @@ fun CustomerDataDto.toCustomerData() = CustomerData(
     ID = ID,
     BOOKNO = BOOKNO,
     NAME = NAME,
-    AGE = AGE,
     GENDER = GENDER,
     MOB_NO = MOB_NO,
     ADDRESS = ADDRESS,
+    CREATED_AT = CREATED_AT,
+    UPDATED_AT = UPDATED_AT
 )
