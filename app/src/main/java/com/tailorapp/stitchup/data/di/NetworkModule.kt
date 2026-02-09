@@ -10,6 +10,7 @@ import com.tailorapp.stitchup.data.repo.customerRepo.AddCustomerRepoImp
 import com.tailorapp.stitchup.data.repo.customerRepo.CustomersListRepoImp
 import com.tailorapp.stitchup.data.repo.customerRepo.GetCustomerDetailsRepoImp
 import com.tailorapp.stitchup.data.repo.customerRepo.UpdateCustomerRepoImp
+import com.tailorapp.stitchup.data.repo.customerRepo.UpdatePantRepoImp
 import com.tailorapp.stitchup.data.repo.customerRepo.UpdateShirtRepoImp
 import com.tailorapp.stitchup.domain.repo.authRepo.LoginRepo
 import com.tailorapp.stitchup.domain.repo.authRepo.RegisterRepo
@@ -17,6 +18,7 @@ import com.tailorapp.stitchup.domain.repo.customerRepo.AddCustomerRepo
 import com.tailorapp.stitchup.domain.repo.customerRepo.CustomersListRepo
 import com.tailorapp.stitchup.domain.repo.customerRepo.GetCustomerDetailsRepo
 import com.tailorapp.stitchup.domain.repo.customerRepo.UpdateCustomerRepo
+import com.tailorapp.stitchup.domain.repo.customerRepo.UpdatePantRepo
 import com.tailorapp.stitchup.domain.repo.customerRepo.UpdateShirtRepo
 import com.tailorapp.stitchup.retrofit.ApiKeyInterceptor
 import dagger.Module
@@ -97,4 +99,9 @@ object NetworkModule {
     @Singleton
     fun provideUpdateShirtRepo(api: CustomerApiService): UpdateShirtRepo =
         UpdateShirtRepoImp(api)
+
+    @Provides
+    @Singleton
+    fun provideUpdatePantRepo(api: CustomerApiService): UpdatePantRepo =
+        UpdatePantRepoImp(api)
 }

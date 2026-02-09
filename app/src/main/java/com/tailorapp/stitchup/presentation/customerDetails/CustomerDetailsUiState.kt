@@ -1,5 +1,6 @@
 package com.tailorapp.stitchup.presentation.customerDetails
 
+import com.tailorapp.stitchup.data.remote.dto.customerDto.updatePantDto.UpdatePantResponseDto
 import com.tailorapp.stitchup.domain.model.customer.getCustomer.GetCustomerDetailsResponse
 import com.tailorapp.stitchup.domain.model.customer.updateCustomer.UpdateCustomerResponse
 import com.tailorapp.stitchup.domain.model.customer.updateShirt.UpdateShirtResponse
@@ -11,13 +12,15 @@ data class CustomerDetailsUiState(
     val customerDetails: GetCustomerDetailsResponse? = null,
     val updateCustomerDetails: UpdateCustomerResponse? = null,
     val updateShirtDetails: UpdateShirtResponse? = null,
+    val updatePantDetails: UpdatePantResponseDto? = null,
     val isUpdateSuccess: Boolean = false,
 
     val name: String = "",
-    val age: String = "",
     val gender: String = "",
     val mobile: String = "",
     val address: String = "",
+    val createdDate: String = "",
+    val updatedDate: String = "",
 
     val shirtChest: String = "",
     val shirtLength: String = "",

@@ -10,7 +10,6 @@ data class AddCustomerUiState(
     var bookNo: String = "",
 
     val name: String = "",
-    val age: String = "",
     val gender: String = "Male",
     val mobile: String = "",
     val address: String = "",

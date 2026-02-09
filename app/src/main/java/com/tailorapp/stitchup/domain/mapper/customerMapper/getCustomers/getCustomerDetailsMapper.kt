@@ -19,15 +19,15 @@ fun CustomerDetailsDto.toCustomerDetails() = CustomerDetails(
     ID = ID,
     BOOKNO = BOOKNO,
     NAME = NAME,
-    AGE = AGE,
     GENDER = GENDER,
     MOB_NO = MOB_NO,
     ADDRESS = ADDRESS,
+    CREATED_AT = CREATED_AT,
+    UPDATED_AT = UPDATED_AT
 )
 
 fun ShirtMeasurementDto.toShirtMeasurement() = ShirtMeasurement(
     SHIRTID = SHIRTID,
-    AMOUNT = AMOUNT,
     CHEST = CHEST,
     BACK = BACK,
     BICEP = BICEP,
@@ -43,7 +43,6 @@ fun ShirtMeasurementDto.toShirtMeasurement() = ShirtMeasurement(
 
 fun PantMeasurementDto.toPantMeasurement() = PantMeasurement(
     PANTID = PANTID,
-    AMOUNT = AMOUNT,
     INSIDE_LENGTH = INSIDE_LENGTH,
     OUTSIDE_LENGTH = OUTSIDE_LENGTH,
     WAIST = WAIST,

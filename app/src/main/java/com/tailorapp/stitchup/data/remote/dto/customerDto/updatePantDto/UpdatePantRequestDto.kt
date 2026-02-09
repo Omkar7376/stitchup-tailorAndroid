@@ -1,6 +1,6 @@
-package com.tailorapp.stitchup.data.remote.dto.customerDto.addCustomer
+package com.tailorapp.stitchup.data.remote.dto.customerDto.updatePantDto
 
-data class PantMeasurementDto(
+data class UpdatePantRequestDto(
     val bottom: Any,
     val insideLength: Any,
     val knee: Any,

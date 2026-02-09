@@ -15,7 +15,6 @@ fun UpdateCustomerResponseDto.toUpdateCustomerResponse() : UpdateCustomerRespons
 
 fun CustomerDto.toCustomerData() = CustomerData(
     ADDRESS = ADDRESS,
-    AGE = AGE,
     GENDER = GENDER,
     MOB_NO = MOB_NO,
     NAME = NAME

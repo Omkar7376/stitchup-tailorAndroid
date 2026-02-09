@@ -12,6 +12,8 @@ data class OrderResponseDto(
     val ORDER_TYPE: String,
     val PANT_AMOUNT: Int,
     val SHIRT_AMOUNT: Int,
+    val SHIRT_TOTAL: Int,
+    val PANT_TOTAL: Int,
     val STATUS: String,
     val TOTAL_AMOUNT: Int
 )
