@@ -10,7 +10,7 @@ data class ShirtMeasurementDto(
     val FRONT2: Any,
     val FRONT3: Any,
     val LENGTH: Any,
-    val ORDER_ID: Any,
+    val CUSTOMER_ID: Any,
     val SHIRTID: Any,
     val SHOULDER: Any,
     val SLEEVE: Any

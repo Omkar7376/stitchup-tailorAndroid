@@ -55,6 +55,7 @@ import com.tailorapp.stitchup.data.remote.dto.customerDto.updatePantDto.UpdatePa
 import com.tailorapp.stitchup.domain.model.customer.getCustomer.GetCustomerDetailsResponse
 import com.tailorapp.stitchup.domain.model.customer.updateShirt.UpdateShirtRequest
 import com.tailorapp.stitchup.presentation.addCustomer.dataClasses.MeasurementField
+import com.tailorapp.stitchup.presentation.common.CommonText
 import com.tailorapp.stitchup.presentation.common.CommonTextField
 import com.tailorapp.stitchup.presentation.common.TopBar
 import com.tailorapp.stitchup.presentation.customerDetails.componenents.GenderDropdown
@@ -72,6 +73,7 @@ fun CustomerProfileScreen(
     var showCustomerDialog by remember { mutableStateOf(false) }
     var showShirtDialog by remember { mutableStateOf(false) }
     var showPantDialog by remember { mutableStateOf(false) }
+    var showAddShirtDialog by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
         viewModel.getCustomerDetails(id = customerId ?: 0)
@@ -278,6 +280,7 @@ fun CustomerProfileScreen(
             }
         )
     }
+
 }
 
 @Composable
@@ -335,7 +338,7 @@ fun CustomerDetailsContent(
                     horizontalArrangement = Arrangement.End,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text("Add Shirt Measurement", color = uiColor, fontWeight = FontWeight.Bold)
+                    CommonText("Add Shirt Measurement")
                     IconButton(
                         onClick = onAddShirtClick
                     ) {
@@ -371,7 +374,7 @@ fun CustomerDetailsContent(
                     horizontalArrangement = Arrangement.End,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text("Add Pant Measurement")
+                    CommonText("Add Pant Measurement")
                     IconButton(
                         onClick = onAddPantClick
                     ) {
@@ -417,12 +420,7 @@ fun SectionCard(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(
-                    text = title,
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold,
-                    color = uiColor
-                )
+                CommonText(title)
                 IconButton(onClick = { onClick() }) {
                     Icon(
                         imageVector = Icons.Default.Edit,
@@ -479,7 +477,7 @@ fun UpdateCustomer(
 
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text(text = "Edit Customer Details") },
+        title = { CommonText("Edit Customer Details") },
         text = {
             Column(
                 modifier = Modifier
@@ -588,7 +586,7 @@ fun UpdateShirt(
     AlertDialog(
         modifier = Modifier.fillMaxWidth(),
         onDismissRequest = onDismiss,
-        title = { Text(text = "Edit Shirt Details") },
+        title = { CommonText("Edit Shirt Details") },
         text = {
             Column(
                 modifier = Modifier
@@ -601,7 +599,7 @@ fun UpdateShirt(
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
 
-                Text("Shirt Measurement", style = MaterialTheme.typography.titleMedium)
+                CommonText("Shirt Measurement")
 
                 fields.chunked(3).forEach { rowFields ->
                     Row(
@@ -687,7 +685,7 @@ fun UpdatePant(
     AlertDialog(
         modifier = Modifier.fillMaxWidth(),
         onDismissRequest = onDismiss,
-        title = { Text(text = "Update Pant Details") },
+        title = { CommonText("Edit Pant Details") },
         text = {
             Column(
                 modifier = Modifier
@@ -700,7 +698,7 @@ fun UpdatePant(
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
 
-                Text("Pant Measurement", style = MaterialTheme.typography.titleMedium)
+                CommonText("Pant Measurement")
 
                 fields.chunked(3).forEach { rowFields ->
                     Row(
@@ -801,7 +799,7 @@ fun AddShirt(
     AlertDialog(
         modifier = Modifier.fillMaxWidth(),
         onDismissRequest = onDismiss,
-        title = { Text(text = "Add Shirt Details") },
+        title = { CommonText("Add Shirt Details") },
         text = {
             Column(
                 modifier = Modifier
@@ -814,7 +812,7 @@ fun AddShirt(
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
 
-                Text("Shirt Measurement", style = MaterialTheme.typography.titleMedium)
+                CommonText("Shirt Measurement")
 
                 fields.chunked(3).forEach { rowFields ->
                     Row(

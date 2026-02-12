@@ -35,6 +35,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
@@ -58,7 +59,7 @@ import com.tailorapp.stitchup.ui.theme.dimens
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
-    navTo: (String) -> Unit = {}
+    navController: NavController
 ) {
 
     val homeViewModel: HomeViewModel = hiltViewModel()
@@ -153,7 +154,9 @@ fun HomeScreen(
         ){
             composable(BottomNavItem.Home.route){
                 HomeTabContent(
-                    navTo = navTo
+                    navTo = {route ->
+                        navController.navigate(route)
+                    }
                 )
             }
             composable(BottomNavItem.Orders.route){
@@ -161,8 +164,9 @@ fun HomeScreen(
             }
             composable(BottomNavItem.Customer.route){
                 CustomersScreen(
-                    viewModel = viewModel(),
-                    navController = bottomNavController
+                    viewModel = hiltViewModel(),
+                    navController = navController,
+                    showTopBar = false
                 )
             }
             composable(BottomNavItem.Invoices.route){
@@ -247,21 +251,4 @@ fun Logout(
             fontWeight = FontWeight.Bold
         )
     }
-}
-
-@Preview(
-    name = "Light Mode",
-    showBackground = true,
-    showSystemUi = true,
-    uiMode = Configuration.UI_MODE_NIGHT_NO
-)
-@Preview(
-    name = "Dark Mode",
-    showBackground = true,
-    showSystemUi = true,
-    uiMode = Configuration.UI_MODE_NIGHT_YES
-)
-@Composable
-fun Prev() {
-    HomeScreen(navTo = {})
 }

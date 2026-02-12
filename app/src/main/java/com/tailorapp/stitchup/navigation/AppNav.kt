@@ -28,6 +28,7 @@ import androidx.navigation.navArgument
 import com.tailorapp.stitchup.presentation.AuthState
 import com.tailorapp.stitchup.presentation.MainViewModel
 import com.tailorapp.stitchup.presentation.addCustomer.AddCustomerScreen
+import com.tailorapp.stitchup.presentation.assignOrder.AssignOrderScreen
 import com.tailorapp.stitchup.presentation.customerDetails.CustomerProfileScreen
 import com.tailorapp.stitchup.presentation.customer.CustomersScreen
 import com.tailorapp.stitchup.presentation.deliveryOrder.DeliveryOrder
@@ -36,6 +37,7 @@ import com.tailorapp.stitchup.presentation.home.HomeViewModel
 import com.tailorapp.stitchup.presentation.login.LoginScreen
 import com.tailorapp.stitchup.presentation.order.OrdersScreen
 import com.tailorapp.stitchup.presentation.registration.RegisterScreen
+import com.tailorapp.stitchup.presentation.workers.WorkerList
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -86,9 +88,7 @@ fun AppNav() {
         ) {
             composable("home") {
                 HomeScreen(
-                    navTo = {route ->
-                        navController.navigate(route)
-                    }
+                    navController = navController
                 )
 //                LaunchedEffect(authState) {
 //                    if (authState is AuthState.Unauthenticated) {
@@ -110,6 +110,13 @@ fun AppNav() {
             composable("customerList") {
                 CustomersScreen(
                     navController = navController,
+                    showTopBar = true
+                )
+            }
+            composable("customerList?fromCard=true") {
+                CustomersScreen(
+                    navController = navController,
+                    showTopBar = true
                 )
             }
             composable("deliveryOrder") {
@@ -127,6 +134,12 @@ fun AppNav() {
                     customerId = customerId,
                     navController = navController
                 )
+            }
+            composable("workerList") {
+                WorkerList()
+            }
+            composable("assignOrder") {
+                AssignOrderScreen()
             }
         }
     }

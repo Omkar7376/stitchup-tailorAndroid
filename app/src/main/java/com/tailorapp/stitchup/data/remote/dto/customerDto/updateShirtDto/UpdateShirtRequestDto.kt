@@ -1,15 +1,15 @@
 package com.tailorapp.stitchup.data.remote.dto.customerDto.updateShirtDto
 
 data class UpdateShirtRequestDto(
-    val back: Double,
-    val bicep: Double,
-    val chest: Double,
-    val collar: Double,
-    val cuff: Double,
-    val front1: Double,
-    val front2: Double,
-    val front3: Double,
-    val length: Double,
-    val shoulder: Double,
-    val sleeve: Double
+    val back: Any,
+    val bicep: Any,
+    val chest: Any,
+    val collar: Any,
+    val cuff: Any,
+    val front1: Any,
+    val front2: Any,
+    val front3: Any,
+    val length: Any,
+    val shoulder: Any,
+    val sleeve: Any
 )
