@@ -2,13 +2,14 @@ package com.tailorapp.stitchup.data.remote.api.customerApi
 
 import com.tailorapp.stitchup.data.remote.dto.customerDto.addCustomer.AddCustomerRequestDto
 import com.tailorapp.stitchup.data.remote.dto.customerDto.addCustomer.AddCustomerResponseDto
+import com.tailorapp.stitchup.data.remote.dto.orderDto.createOrder.CreateOrderReqDto
+import com.tailorapp.stitchup.data.remote.dto.orderDto.createOrder.CreateOrderRespDto
 import com.tailorapp.stitchup.data.remote.dto.customerDto.customerList.GetCustomerResponseDto
 import com.tailorapp.stitchup.data.remote.dto.customerDto.getCustomerDetails.GetCustomerDetailsResponseDto
 import com.tailorapp.stitchup.data.remote.dto.customerDto.updateCustomerDto.UpdateCustomerRequestDto
 import com.tailorapp.stitchup.data.remote.dto.customerDto.updateCustomerDto.UpdateCustomerResponseDto
 import com.tailorapp.stitchup.data.remote.dto.customerDto.updatePantDto.UpdatePantRequestDto
 import com.tailorapp.stitchup.data.remote.dto.customerDto.updatePantDto.UpdatePantResponseDto
-import com.tailorapp.stitchup.data.remote.dto.customerDto.updateShirtDto.UpdateShirtResponseDto
 import com.tailorapp.stitchup.domain.model.customer.updateShirt.UpdateShirtRequest
 import com.tailorapp.stitchup.domain.model.customer.updateShirt.UpdateShirtResponse
 import retrofit2.Response
@@ -49,4 +50,10 @@ interface CustomerApiService {
         @Path("id") id: Int,
         @Body updatePantRequest: UpdatePantRequestDto
     ): Response<UpdatePantResponseDto>
+
+    @POST("/order/createOrder/{id}")
+    suspend fun createOrder(
+        @Path("id") id: Int,
+        @Body createOrderRequest: CreateOrderReqDto
+    ): Response<CreateOrderRespDto>
 }

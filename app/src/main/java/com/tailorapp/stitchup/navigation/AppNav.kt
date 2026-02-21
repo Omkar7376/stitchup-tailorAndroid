@@ -35,6 +35,7 @@ import com.tailorapp.stitchup.presentation.deliveryOrder.DeliveryOrder
 import com.tailorapp.stitchup.presentation.home.HomeScreen
 import com.tailorapp.stitchup.presentation.home.HomeViewModel
 import com.tailorapp.stitchup.presentation.login.LoginScreen
+import com.tailorapp.stitchup.presentation.newOrder.NewOrder
 import com.tailorapp.stitchup.presentation.order.OrdersScreen
 import com.tailorapp.stitchup.presentation.registration.RegisterScreen
 import com.tailorapp.stitchup.presentation.workers.WorkerList
@@ -122,9 +123,30 @@ fun AppNav() {
             composable("deliveryOrder") {
                 DeliveryOrder()
             }
-            composable("totalOrders") {
+            composable(route = "totalOrders") {
                 OrdersScreen()
             }
+
+            composable(
+                route = "newOrder/{customerId}/{name}/{mobile}",
+                arguments = listOf(
+                    navArgument("customerId") { type = NavType.IntType },
+                    navArgument("name") { type = NavType.StringType },
+                    navArgument("mobile") { type = NavType.StringType }
+                )
+            ){  backStackEntry ->
+                val customerId = backStackEntry.arguments?.getInt("customerId")
+                val name = backStackEntry.arguments?.getString("name")
+                val mobile = backStackEntry.arguments?.getString("mobile")
+
+                NewOrder(
+                    customerId = customerId,
+                    name = name,
+                    mobile = mobile,
+                    navController = navController
+                )
+            }
+
             composable("customerDetails/{customerId}",
                 arguments = listOf(
                     navArgument("customerId") { type = NavType.IntType }

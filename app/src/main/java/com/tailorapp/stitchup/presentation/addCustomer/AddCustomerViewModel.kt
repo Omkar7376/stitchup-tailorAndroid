@@ -18,7 +18,8 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class AddCustomerViewModel @Inject constructor(private val addCustomerUseCase: AddCustomerUseCase) : ViewModel() {
+class AddCustomerViewModel @Inject constructor(private val addCustomerUseCase: AddCustomerUseCase) :
+    ViewModel() {
     private val _uiState = MutableStateFlow(AddCustomerUiState())
     val uiState: StateFlow<AddCustomerUiState> = _uiState.asStateFlow()
 
@@ -27,13 +28,20 @@ class AddCustomerViewModel @Inject constructor(private val addCustomerUseCase: A
             addCustomerUseCase.addCustomer(request).collect { result ->
                 when (result) {
                     is Resource.Loading -> {
-                        _uiState.value = AddCustomerUiState(isLoading = true)
+                        _uiState.update { it.copy(isLoading = true) }
                     }
+
                     is Resource.Success -> {
-                        _uiState.value = AddCustomerUiState(isLoading = false, message = result.data?.message)
+                        _uiState.update {
+                            it.copy(
+                                isLoading = false,
+                                message = result.data?.message ?: "Order Created Successfully"
+                            )
+                        }
                         sendMessage("Customer Created Successfully....")
                         Log.d("###", "addNewCustomer: ${result.data}")
                     }
+
                     is Resource.Error -> {
                         _uiState.value = AddCustomerUiState(error = result.message)
                     }
@@ -42,7 +50,7 @@ class AddCustomerViewModel @Inject constructor(private val addCustomerUseCase: A
         }
     }
 
-    fun onCreateCustomerClicked(){
+    fun onCreateCustomerClicked() {
         val state = _uiState.value
         when {
             state.name.isBlank() -> return sendMessage("Name is Required")
@@ -186,103 +194,103 @@ class AddCustomerViewModel @Inject constructor(private val addCustomerUseCase: A
         _uiState.update { it.copy(note = value) }
     }
 
-    fun onShirtQntChanged(value: String){
-        _uiState.update { it.copy(shirtQty = value ) }
+    fun onShirtQntChanged(value: String) {
+        _uiState.update { it.copy(shirtQty = value) }
     }
 
-    fun onShirtAmtChanged(value: String){
+    fun onShirtAmtChanged(value: String) {
         _uiState.update { it.copy(shirtAmt = value) }
     }
 
-    fun onShirtChestChanged(value: String){
+    fun onShirtChestChanged(value: String) {
         _uiState.update { it.copy(shirtChest = value) }
     }
 
-    fun onShirtLengthChanged(value: String){
-        _uiState.update { it.copy(shirtLength = value ) }
+    fun onShirtLengthChanged(value: String) {
+        _uiState.update { it.copy(shirtLength = value) }
     }
 
-    fun onShirtShoulderChanged(value: String){
-        _uiState.update { it.copy(shirtShoulder = value ) }
+    fun onShirtShoulderChanged(value: String) {
+        _uiState.update { it.copy(shirtShoulder = value) }
     }
 
-    fun onShirtSleeveChanged(value: String){
-        _uiState.update { it.copy(shirtSleeve = value ) }
+    fun onShirtSleeveChanged(value: String) {
+        _uiState.update { it.copy(shirtSleeve = value) }
     }
 
-    fun onShirtBicepChanged(value: String){
-        _uiState.update { it.copy(shirtBicep = value ) }
+    fun onShirtBicepChanged(value: String) {
+        _uiState.update { it.copy(shirtBicep = value) }
     }
 
-    fun onShirtCuffChanged(value: String){
-        _uiState.update { it.copy(shirtCuff = value ) }
+    fun onShirtCuffChanged(value: String) {
+        _uiState.update { it.copy(shirtCuff = value) }
     }
 
-    fun onShirtCollarChanged(value: String){
-        _uiState.update { it.copy(shirtCollar = value ) }
+    fun onShirtCollarChanged(value: String) {
+        _uiState.update { it.copy(shirtCollar = value) }
     }
 
-    fun onShirtBackChanged(value: String){
-        _uiState.update { it.copy(shirtBack = value ) }
+    fun onShirtBackChanged(value: String) {
+        _uiState.update { it.copy(shirtBack = value) }
     }
 
-    fun onShirtFront1Changed(value: String){
-        _uiState.update { it.copy(shirtFront1 = value ) }
+    fun onShirtFront1Changed(value: String) {
+        _uiState.update { it.copy(shirtFront1 = value) }
     }
 
-    fun onShirtFront2Changed(value: String){
-        _uiState.update { it.copy(shirtFront2 = value ) }
+    fun onShirtFront2Changed(value: String) {
+        _uiState.update { it.copy(shirtFront2 = value) }
     }
 
-    fun onShirtFront3Changed(value: String){
-        _uiState.update { it.copy(shirtFront3 = value ) }
+    fun onShirtFront3Changed(value: String) {
+        _uiState.update { it.copy(shirtFront3 = value) }
     }
 
-    fun onPantQntChanged(value: String){
-        _uiState.update { it.copy(pantQty = value ) }
+    fun onPantQntChanged(value: String) {
+        _uiState.update { it.copy(pantQty = value) }
     }
 
-    fun onPantAmtChanged(value: String){
-        _uiState.update { it.copy(pantAmt = value ) }
+    fun onPantAmtChanged(value: String) {
+        _uiState.update { it.copy(pantAmt = value) }
     }
 
-    fun onPantOutsideChanged(value: String){
-        _uiState.update { it.copy(pantOutsideLength = value ) }
+    fun onPantOutsideChanged(value: String) {
+        _uiState.update { it.copy(pantOutsideLength = value) }
     }
 
-    fun onPantInsideChanged(value: String){
-        _uiState.update { it.copy(pantInsideLength = value ) }
+    fun onPantInsideChanged(value: String) {
+        _uiState.update { it.copy(pantInsideLength = value) }
     }
 
-    fun onPantRiseChanged(value: String){
-        _uiState.update { it.copy(pantRise = value ) }
+    fun onPantRiseChanged(value: String) {
+        _uiState.update { it.copy(pantRise = value) }
     }
 
-    fun onPantWaistChanged(value: String){
-        _uiState.update { it.copy(pantWaist = value ) }
+    fun onPantWaistChanged(value: String) {
+        _uiState.update { it.copy(pantWaist = value) }
     }
 
-    fun onPantSeatChanged(value: String){
-        _uiState.update { it.copy(pantSeat = value ) }
+    fun onPantSeatChanged(value: String) {
+        _uiState.update { it.copy(pantSeat = value) }
     }
 
-    fun onPantThighChanged(value: String){
-        _uiState.update { it.copy(pantThigh = value ) }
+    fun onPantThighChanged(value: String) {
+        _uiState.update { it.copy(pantThigh = value) }
     }
 
-    fun onPantKneeChanged(value: String){
-        _uiState.update { it.copy(pantKnee = value ) }
+    fun onPantKneeChanged(value: String) {
+        _uiState.update { it.copy(pantKnee = value) }
     }
 
-    fun onPantBottomChanged(value: String){
-        _uiState.update { it.copy(pantBottom = value ) }
+    fun onPantBottomChanged(value: String) {
+        _uiState.update { it.copy(pantBottom = value) }
     }
 
     fun sendMessage(message: String) {
         _uiState.update { it.copy(message = message) }
     }
 
-    fun clearMessage(){
+    fun clearMessage() {
         _uiState.value = _uiState.value.copy(message = null)
     }
 }

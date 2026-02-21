@@ -1,6 +1,8 @@
 package com.tailorapp.stitchup.presentation.home
 
 import android.content.res.Configuration
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Spacer
@@ -56,6 +58,7 @@ import com.tailorapp.stitchup.ui.theme.SoftMediumGolden
 import com.tailorapp.stitchup.ui.theme.White
 import com.tailorapp.stitchup.ui.theme.dimens
 
+@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
