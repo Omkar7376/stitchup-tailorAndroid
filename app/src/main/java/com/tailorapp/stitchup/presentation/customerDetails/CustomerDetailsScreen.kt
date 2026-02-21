@@ -1,5 +1,6 @@
 package com.tailorapp.stitchup.presentation.customerDetails
 
+import android.net.Uri
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -101,6 +102,20 @@ fun CustomerProfileScreen(
                         contentDescription = null,
                         tint = uiColor,
                     )
+                },
+                actions = {
+                    TextButton(
+                        onClick = {
+                            val customer = uiState.customerDetails?.customer?.firstOrNull()
+                            val encodedName = Uri.encode(customer?.NAME)
+                            val encodedMobile = Uri.encode(customer?.MOB_NO)
+                            navController.navigate(
+                                "newOrder/${customer?.ID}/$encodedName/$encodedMobile"
+                            )
+                        }
+                    ) {
+                        CommonText("Create Order")
+                    }
                 }
             )
         }
